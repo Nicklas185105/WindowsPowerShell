@@ -1,9 +1,18 @@
 # A simple idle/clicker game module for PowerShell with save/load and shop functionality
 
-. $PSScriptRoot\init.ps1
-. $PSScriptRoot\utils.ps1
-. $PSScriptRoot\saving-loading.ps1
-. $PSScriptRoot\screen.ps1
+. $PSScriptRoot\BuildingDefinition.ps1
+. $PSScriptRoot\IdleGameData.ps1
+. $PSScriptRoot\SavingLoading.ps1
+. $PSScriptRoot\GameScreen.ps1
+
+$global:GameState = @{
+    Running      = $false
+    UpdateScreen = $true
+}
+
+$global:Data = [IdleGameData]::new()
+
+$global:BuildingData = [BuildingData]::new()
 
 function Start-IdleClickerGame {
     param(
@@ -17,6 +26,8 @@ function Start-IdleClickerGame {
 
     # Optionally load state on start
     Load-IdleClickerGame
+
+    $screen = [GameScreen]::new()
 
     $global:GameState.Running = $true
 
@@ -42,7 +53,7 @@ function Start-IdleClickerGame {
     while ($global:GameState.Running) {
         # Update the display if flagged
         if ($global:GameState.UpdateScreen) {
-            Show-GameScreen
+            $screen.Show($global:Data, $global:BuildingData)
             $global:GameState.UpdateScreen = $false
         }
 
@@ -68,28 +79,34 @@ function Start-IdleClickerGame {
                     Reset-IdleClickerGame
                 }
                 'D1' {
-                    Buy-Building -Building 1
+                    $global:BuildingData.Cursor.BuyBuilding()
                 }
                 'D2' {
-                    Buy-Building -Building 2
+                    $global:BuildingData.Grandma.BuyBuilding()
                 }
                 'D3' {
-                    Buy-Building -Building 3
+                    $global:BuildingData.Farm.BuyBuilding()
                 }
                 'D4' {
-                    Buy-Building -Building 4
+                    $global:BuildingData.Mine.BuyBuilding()
                 }
                 'D5' {
-                    Buy-Building -Building 5
+                    $global:BuildingData.Factory.BuyBuilding()
                 }
                 'D6' {
-                    Buy-Building -Building 6
+                    $global:BuildingData.Bank.BuyBuilding()
                 }
                 'D7' {
-                    Buy-Building -Building 7
+                    $global:BuildingData.Temple.BuyBuilding()
                 }
                 'D8' {
-                    Buy-Building -Building 8
+                    $global:BuildingData.WizardTower.BuyBuilding()
+                }
+                'D9' {
+                    $global:BuildingData.Shipment.BuyBuilding()
+                }
+                'D0' {
+                    $global:BuildingData.AlchemyLab.BuyBuilding()
                 }
                 'Escape' {
                     $global:GameState.Running = $false
@@ -121,23 +138,9 @@ function Stop-IdleClickerGame {
 
 function Reset-IdleClickerGame {
     # Reset the game state to its defaults
-    $global:Data = @{
-        Clicks          = 0      # Total number of clicks/points
-        IdleIncome      = 0      # Points gained automatically every interval
-        ClickValue      = 1      # Points per click
-        LastSaveTime    = $null  # Holds the DateTime of the last save
-        Buildings       = @{
-            Cursor      = 0
-            Grandma     = 0
-            Farm        = 0
-            Mine        = 0
-            Factory     = 0
-            Bank        = 0
-            Temple      = 0
-            WizardTower = 0
-        }
-    }
+    $global:Data = [IdleGameData]::new()
+    $global:BuildingData = [BuildingData]::new()
     Write-Host "Game has been reset."
 }
 
-Export-ModuleMember -Function Start-IdleClickerGame, Stop-IdleClickerGame, Reset-IdleClickerGame, Save-IdleClickerGame, Load-IdleClickerGame, Open-IdleClickerShop, Buy-Building, Get-IdleIncomeValue, Get-BuildingPrice
+Export-ModuleMember -Function Start-IdleClickerGame, Stop-IdleClickerGame, Reset-IdleClickerGame, Save-IdleClickerGame, Load-IdleClickerGame
