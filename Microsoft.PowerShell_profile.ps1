@@ -55,7 +55,7 @@ Get-ChildItem -Path $scriptFolder -Filter *.ps1 | ForEach-Object {
 # -------------------------------
 # Define your custom alias names in a global variable.
 # Update this list with any additional custom aliases you create.
-$Global:MyCustomAliases = $Global:MyCustomAliases + @("ll", "la", "grep", "cls", "showall", "keeponline")
+$Global:MyCustomAliases = $Global:MyCustomAliases + @("ll", "la", "grep", "cls", "showall", "keeponline", "clickergame")
 
 Set-Alias ll Get-ChildItem
 Set-Alias la "Get-ChildItem -Force"
@@ -65,6 +65,8 @@ Set-Alias -Name showall -Value Show-CustomAliases
 
 # Create alias for the Keep Online function
 Set-Alias -Name keeponline -Value Keep-Alive
+
+Set-Alias -Name clickergame -Value Start-IdleClickerGame
 
 # -------------------------------
 # Environment Variables
