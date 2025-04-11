@@ -1,6 +1,6 @@
 class GameScreen {
     [int]$LeftWidth = 24
-    [int]$RightWidth = 26
+    [int]$RightWidth = 31
     [string]$LeftBorder
     [string]$RightBorder
 
@@ -19,7 +19,7 @@ class GameScreen {
 
     [string[]] FormatShopItem([string]$name, $owned, [string]$price) {
         # First line: name left-aligned in 18 characters, owned count right-aligned in 6 characters.
-        $line1 = "{0,-18}{1,6}" -f $name, $owned
+        $line1 = "{0,-25}{1,6}" -f $name, $owned
         # Second line: the cost, right-aligned in the full right column, with " p" appended.
         $line2 = "{0,$($this.RightWidth)}" -f ("{0} p" -f $price)
         return @($line1, $line2)
@@ -111,11 +111,11 @@ class GameScreen {
         $leftLines.Add(" " * $this.LeftWidth)                                           # Blank line
         $leftLines.Add(" " * $this.LeftWidth)                                           # Blank line
         $leftLines.Add("Keys".PadRight($this.LeftWidth))
-        $leftLines.Add("Space: Click".PadRight($this.LeftWidth))
-        $leftLines.Add("R: Reset game".PadRight($this.LeftWidth))
-        $leftLines.Add("S: Save game".PadRight($this.LeftWidth))
-        $leftLines.Add("L: Load game".PadRight($this.LeftWidth))
-        $leftLines.Add("Escape: Quit game".PadRight($this.LeftWidth))
+        $leftLines.Add("$($global:Keys.Space.Name): Click".PadRight($this.LeftWidth))
+        $leftLines.Add("$($global:Keys.R.Name): Reset game".PadRight($this.LeftWidth))
+        $leftLines.Add("$($global:Keys.S.Name): Save game".PadRight($this.LeftWidth))
+        $leftLines.Add("$($global:Keys.L.Name): Load game".PadRight($this.LeftWidth))
+        $leftLines.Add("$($global:Keys.Escape.Name): Quit game".PadRight($this.LeftWidth))
         $leftLines.Add("(don't do ctrl+C)".PadRight($this.LeftWidth))
         $leftLines.Add(" " * $this.LeftWidth)
         $leftLines.Add(" " * $this.LeftWidth)
@@ -133,14 +133,38 @@ class GameScreen {
         # Build the right column (shop) lines.
         $rightLines = New-Object System.Collections.Generic.List[string]
         $rightLines.Add($this.RightBorder)  # Top border
+        $rightLines2 = New-Object System.Collections.Generic.List[string]
+        $rightLines2.Add($this.RightBorder)
 
-        foreach ($property in $buildings.PSObject.Properties){
-            $bd = $property.Value
-            $lines = $this.FormatShopItem($bd.Name, $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+        $properties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
+        $totalCount = $properties.Count
+        $midpoint = [math]::Ceiling($totalCount / 2)
+
+        # Process the first half.
+        for ($i = 0; $i -lt $midpoint; $i++) {
+            $bd = $properties[$i].Value
+            $lines = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
             $rightLines.Add($lines[0])
             $rightLines.Add($lines[1])
             $rightLines.Add($this.RightBorder)
         }
+
+        # Process the second half.
+        for ($i = $midpoint; $i -lt $totalCount; $i++) {
+            $bd = $properties[$i].Value
+            $lines = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+            $rightLines2.Add($lines[0])
+            $rightLines2.Add($lines[1])
+            $rightLines2.Add($this.RightBorder)
+        }
+
+        # foreach ($property in $buildings.PSObject.Properties){
+        #     $bd = $property.Value
+        #     $lines = $this.FormatShopItem($bd.Name, $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+        #     $rightLines.Add($lines[0])
+        #     $rightLines.Add($lines[1])
+        #     $rightLines.Add($this.RightBorder)
+        # }
 
         # Determine the maximum number of lines for proper alignment.
         $maxLines = [Math]::Max($leftLines.Count, $rightLines.Count)
@@ -148,7 +172,8 @@ class GameScreen {
         for ($i = 0; $i -lt $maxLines; $i++) {
             $leftText = if ($i -lt $leftLines.Count) { $leftLines[$i] } else { " " * $this.LeftWidth }
             $rightText = if ($i -lt $rightLines.Count) { $rightLines[$i] } else { " " * $this.RightWidth }
-            Write-Host ("| {0,-$($this.LeftWidth)} | {1,-$($this.RightWidth)} |" -f $leftText, $rightText)
+            $rightText2 = if ($i -lt $rightLines2.Count) { $rightLines2[$i] } else { " " * $this.RightWidth }
+            Write-Host ("| {0,-$($this.LeftWidth)} | {1,-$($this.RightWidth)} | {2,-$($this.RightWidth)} |" -f $leftText, $rightText, $rightText2)
         }
     }
 }

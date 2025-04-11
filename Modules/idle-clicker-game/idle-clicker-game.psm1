@@ -1,9 +1,12 @@
 # A simple idle/clicker game module for PowerShell with save/load and shop functionality
 
+. $PSScriptRoot\Keys.ps1
 . $PSScriptRoot\BuildingDefinition.ps1
 . $PSScriptRoot\IdleGameData.ps1
 . $PSScriptRoot\SavingLoading.ps1
 . $PSScriptRoot\GameScreen.ps1
+
+$global:Keys = [Keys]::new()
 
 $global:GameState = @{
     Running      = $false
@@ -62,53 +65,83 @@ function Start-IdleClickerGame {
             $global:GameState.UpdateScreen = $true
             $key = [console]::ReadKey($true)
             switch ($key.Key) {
-                'Spacebar' {
+                $global:Keys.Space.Key {
                     $global:Data.Clicks += $global:Data.ClickValue
                 }
-                'S' {
+                $global:Keys.S.Key {
                     Save-IdleClickerGame
                 }
-                'L' {
+                $global:Keys.L.Key {
                     Load-IdleClickerGame
                 }
-                'P' {
+                $global:Keys.P.Key {
                     # Open the shop
                     Open-IdleClickerShop
                 }
-                'R' {
+                $global:Keys.R.Key {
                     Reset-IdleClickerGame
                 }
-                'D1' {
+                $global:Keys.D1.Key {
                     $global:BuildingData.Cursor.BuyBuilding()
                 }
-                'D2' {
+                $global:Keys.D2.Key {
                     $global:BuildingData.Grandma.BuyBuilding()
                 }
-                'D3' {
+                $global:Keys.D3.Key {
                     $global:BuildingData.Farm.BuyBuilding()
                 }
-                'D4' {
+                $global:Keys.D4.Key {
                     $global:BuildingData.Mine.BuyBuilding()
                 }
-                'D5' {
+                $global:Keys.D5.Key {
                     $global:BuildingData.Factory.BuyBuilding()
                 }
-                'D6' {
+                $global:Keys.D6.Key {
                     $global:BuildingData.Bank.BuyBuilding()
                 }
-                'D7' {
+                $global:Keys.D7.Key {
                     $global:BuildingData.Temple.BuyBuilding()
                 }
-                'D8' {
+                $global:Keys.D8.Key {
                     $global:BuildingData.WizardTower.BuyBuilding()
                 }
-                'D9' {
+                $global:Keys.D9.Key {
                     $global:BuildingData.Shipment.BuyBuilding()
                 }
-                'D0' {
+                $global:Keys.D0.Key {
                     $global:BuildingData.AlchemyLab.BuyBuilding()
                 }
-                'Escape' {
+                $global:Keys.N1.Key {
+                    $global:BuildingData.Portal.BuyBuilding()
+                }
+                $global:Keys.N2.Key {
+                    $global:BuildingData.TimeMachine.BuyBuilding()
+                }
+                $global:Keys.N3.Key {
+                    $global:BuildingData.AntimatterCondenser.BuyBuilding()
+                }
+                $global:Keys.N4.Key {
+                    $global:BuildingData.Prism.BuyBuilding()
+                }
+                $global:Keys.N5.Key {
+                    $global:BuildingData.Chancemaker.BuyBuilding()
+                }
+                $global:Keys.N6.Key {
+                    $global:BuildingData.FractalEngine.BuyBuilding()
+                }
+                $global:Keys.N7.Key {
+                    $global:BuildingData.JavascriptConsole.BuyBuilding()
+                }
+                $global:Keys.N8.Key {
+                    $global:BuildingData.Idleverse.BuyBuilding()
+                }
+                $global:Keys.N9.Key {
+                    $global:BuildingData.CortexBaker.BuyBuilding()
+                }
+                $global:Keys.N0.Key {
+                    $global:BuildingData.You.BuyBuilding()
+                }
+                $global:Keys.Escape.Key {
                     $global:GameState.Running = $false
                 }
                 default {
