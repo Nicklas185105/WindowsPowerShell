@@ -1,0 +1,1 @@
+$global:BuildingData.Temple = [BuildingDefinition]::new("Temple", 20000000, 7800, $global:Keys.D7)

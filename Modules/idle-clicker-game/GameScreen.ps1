@@ -121,7 +121,7 @@ class GameScreen {
         $leftLines.Add(" " * $this.LeftWidth)
         $leftLines.Add("Since last save".PadRight($this.LeftWidth))
         if ($gameData.LastSaveTime) {
-            $elapsed = (Get-Date).Subtract([DateTime]::ParseExact($gameData.LastSaveTime, "o", [System.Globalization.CultureInfo]::InvariantCulture))
+            $elapsed = (Get-Date).Subtract([DateTime]::ParseExact($gameData.LastSaveTime, "HH:mm:ss", [System.Globalization.CultureInfo]::InvariantCulture))
             $timeStr = $elapsed.ToString("hh\:mm\:ss")
         }
         else {

@@ -1,0 +1,1 @@
+$global:BuildingData.CortexBaker = [BuildingDefinition]::new("Cortex Baker", 1900000000000000000000000, 64000000000000, $global:Keys.N9)

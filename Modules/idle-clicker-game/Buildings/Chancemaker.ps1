@@ -1,0 +1,1 @@
+$global:BuildingData.Chancemaker = [BuildingDefinition]::new("Chancemaker", 26000000000000000, 21000000000, $global:Keys.N5)

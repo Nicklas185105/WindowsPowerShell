@@ -87,6 +87,54 @@ function Get-GitStatus {
     }
 }
 
+# function Load-DLL {
+#     # Define variables for the package
+#     $p# Define variables for the package
+#     $packageName = "NStack.Core"
+#     $version = "1.1.1"  # Adjust as needed
+#     $nugetUrl = "https://www.nuget.org/api/v2/package/$packageName/$version"
+#     $downloadPath = "$env:TEMP\$packageName.$version.nupkg"
+#     $downloadZipPath = "$env:TEMP\$packageName.$version.zip"
+#     $extractPath = "$env:TEMP\$packageName"
+    
+#     # Download the package
+#     Write-Host "Downloading $packageName version $version..."
+#     Invoke-WebRequest -Uri $nugetUrl -OutFile $downloadPath
+    
+#     # Rename the file to .zip to allow extraction
+#     Rename-Item -Path $downloadPath -NewName ([System.IO.Path]::GetFileNameWithoutExtension($downloadPath) + ".zip")
+#     $downloadZipPath = "$env:TEMP\$packageName.$version.zip"
+    
+#     # Remove any old extraction folder and extract the package
+#     if (Test-Path $extractPath) { Remove-Item $extractPath -Recurse -Force }
+#     Write-Host "Extracting package..."
+#     Expand-Archive -Path $downloadZipPath -DestinationPath $extractPath
+    
+#     # Search for Terminal.Gui.dll – prefer the netstandard2.0 version if available.
+#     $dllFile = Get-ChildItem -Path $extractPath -Recurse -Filter "$($packageName).dll" |
+#         Where-Object { $_.FullName -match "netstandard2.0" } |
+#         Select-Object -First 1
+    
+#     if ($dllFile -eq $null) {
+#         Write-Host "netstandard2.0 DLL not found, falling back to first $($packageName).dll found."
+#         $dllFile = Get-ChildItem -Path $extractPath -Recurse -Filter "$($packageName).dll" | Select-Object -First 1
+#     }
+    
+#     if ($dllFile -eq $null) {
+#         Write-Error "$($packageName).dll not found in extracted package at $extractPath. Check the package structure."
+#     } else {
+#         Write-Host "Loading $($packageName).dll from $($dllFile.FullName)..."
+#         try {
+#             Add-Type -Path $dllFile.FullName -ErrorAction Stop
+#             Write-Host "$($packageName) loaded successfully."
+#         }
+#         catch {
+#             Write-Error "Failed to load $($packageName).dll. Error details: $($_.Exception.Message)"
+#             # Optionally, if you want more detailed loader exceptions, you can check LoaderExceptions here.
+#         }
+#     }   
+# }
+
 # More custom functions can be added here...
 
 # -------------------------------

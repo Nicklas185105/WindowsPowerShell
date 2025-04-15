@@ -1,0 +1,1 @@
+$global:BuildingData.Farm = [BuildingDefinition]::new("Farm", 1100, 8, $global:Keys.D3)

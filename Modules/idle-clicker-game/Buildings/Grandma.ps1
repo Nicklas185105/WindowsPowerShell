@@ -1,0 +1,1 @@
+$global:BuildingData.Grandma = [BuildingDefinition]::new("Grandma", 100, 1, $global:Keys.D2)

@@ -1,0 +1,1 @@
+$global:BuildingData.You = [BuildingDefinition]::new("You", 540000000000000000000000000, 510000000000000, $global:Keys.N0)

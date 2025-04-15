@@ -1,0 +1,1 @@
+$global:BuildingData.TimeMachine = [BuildingDefinition]::new("Time Machine", 14000000000000, 65000000, $global:Keys.N2)

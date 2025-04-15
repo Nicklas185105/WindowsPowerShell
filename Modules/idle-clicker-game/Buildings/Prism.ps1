@@ -1,0 +1,1 @@
+$global:BuildingData.Prism = [BuildingDefinition]::new("Prism", 2100000000000000, 2900000000, $global:Keys.N4)

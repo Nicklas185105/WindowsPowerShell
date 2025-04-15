@@ -1,0 +1,1 @@
+$global:BuildingData.Mine = [BuildingDefinition]::new("Mine", 12000, 47, $global:Keys.D4)

@@ -1,0 +1,1 @@
+$global:BuildingData.JavascriptConsole = [BuildingDefinition]::new("Javascript Console", 71000000000000000000, 1100000000000, $global:Keys.N7)

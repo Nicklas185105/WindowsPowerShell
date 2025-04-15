@@ -1,0 +1,1 @@
+$global:BuildingData.WizardTower = [BuildingDefinition]::new("Wizard Tower", 330000000, 44000, $global:Keys.D8)

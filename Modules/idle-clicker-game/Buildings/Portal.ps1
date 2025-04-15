@@ -1,0 +1,1 @@
+$global:BuildingData.Portal = [BuildingDefinition]::new("Portal", 1000000000000, 10000000, $global:Keys.N1)

@@ -1,0 +1,1 @@
+$global:BuildingData.AntimatterCondenser = [BuildingDefinition]::new("Antimatter Condenser", 170000000000000, 430000000, $global:Keys.N3)

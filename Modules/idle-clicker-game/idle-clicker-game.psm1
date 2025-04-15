@@ -1,10 +1,26 @@
 # A simple idle/clicker game module for PowerShell with save/load and shop functionality
 
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+$dllPath = Join-Path $scriptPath "/Imports/Terminal.Gui.dll"
+Write-Host "DLL Path: $($dllPath)"
+if (-Not (Test-Path $dllPath)) {
+    Throw "Terminal.Gui.dll not found at $dllPath"
+}
+
+# Load Terminal.Gui using Assembly.LoadFrom (alternative to Add-Type)
+[Reflection.Assembly]::LoadFrom($dllPath) | Out-Null
+
+# You can verify the load by trying to get one of its types:
+if (-not ([Terminal.Gui.Application] -as [object])) {
+    Throw "Failed to load Terminal.Gui assembly or locate Terminal.Gui.Application type."
+}
+
+. $PSScriptRoot\UpgradeDefinition.ps1
 . $PSScriptRoot\Keys.ps1
 . $PSScriptRoot\BuildingDefinition.ps1
 . $PSScriptRoot\IdleGameData.ps1
 . $PSScriptRoot\SavingLoading.ps1
-. $PSScriptRoot\GameScreen.ps1
+. $PSScriptRoot\GameScreenV2.ps1
 
 $global:Keys = [Keys]::new()
 
@@ -16,6 +32,59 @@ $global:GameState = @{
 $global:Data = [IdleGameData]::new()
 
 $global:BuildingData = [BuildingData]::new()
+
+# Load in all buildings
+. $PSScriptRoot\Buildings\Cursor.ps1
+. $PSScriptRoot\Buildings\Grandma.ps1
+. $PSScriptRoot\Buildings\Farm.ps1
+. $PSScriptRoot\Buildings\Mine.ps1
+. $PSScriptRoot\Buildings\Factory.ps1
+. $PSScriptRoot\Buildings\Bank.ps1
+. $PSScriptRoot\Buildings\Temple.ps1
+. $PSScriptRoot\Buildings\WizardTower.ps1
+. $PSScriptRoot\Buildings\Shipment.ps1
+. $PSScriptRoot\Buildings\AlchemyLab.ps1
+. $PSScriptRoot\Buildings\Portal.ps1
+. $PSScriptRoot\Buildings\TimeMachine.ps1
+. $PSScriptRoot\Buildings\AntimatterCondenser.ps1
+. $PSScriptRoot\Buildings\Prism.ps1
+. $PSScriptRoot\Buildings\Chancemaker.ps1
+. $PSScriptRoot\Buildings\FractalEngine.ps1
+. $PSScriptRoot\Buildings\JavascriptConsole.ps1
+. $PSScriptRoot\Buildings\Idleverse.ps1
+. $PSScriptRoot\Buildings\CortexBaker.ps1
+. $PSScriptRoot\Buildings\You.ps1
+
+# Have a reset state for buildings
+$resetBuildingsState = $global:BuildingData
+
+function Start-IdleClickerGame2 {
+    Load-IdleClickerGame
+
+    [Terminal.Gui.Application]::Init()
+    $top = [Terminal.Gui.Application]::Top
+    
+    # Create an instance of GameScreen and display it.
+    $screen = [GameScreen]::new()
+    $screen.Show($global:Data, $global:BuildingData)
+    $top.Add($screen.MainWindow)
+
+    # --- Add a repeating timer to update dynamic UI elements ---
+    # This uses Terminal.Gui's MainLoop.AddTimer.
+    $updateInterval = [TimeSpan]::FromSeconds(1)  # Update every second.
+    $updateTimer = [Terminal.Gui.Application]::MainLoop.AddTimeout($updateInterval, {
+        param($timer)
+        # Use MainLoop.Invoke to schedule updates on the UI thread.
+        [Terminal.Gui.Application]::MainLoop.Invoke({
+            $screen.Update($global:Data, $global:BuildingData)
+        })
+        return $true  # Return true to keep the timer active.
+    })
+
+    # Run the Terminal.Gui event loop.
+    [Terminal.Gui.Application]::Run($top)
+    [Terminal.Gui.Application]::Shutdown()
+}
 
 function Start-IdleClickerGame {
     param(
@@ -44,19 +113,28 @@ function Start-IdleClickerGame {
         if ($global:GameState.Running) {
             $global:GameState.UpdateScreen = $true
             $global:Data.Clicks += $global:Data.IdleIncome
+            $screen.Update($global:Data, $global:BuildingData)
         }
     } | Out-Null    
 
     $global:Timer.Start()
 
+    $buildings = $global:BuildingData.PSObject.Properties |
+                Where-Object { $_.Value -is [BuildingDefinition] } |
+                ForEach-Object { $_.Value }
+
     Write-Host "Idle/Clicker Game started!"
     Write-Host "Press Spacebar to click, S to save, L to load, P for shop, or Escape to stop the game."
+
+    $screen.Show($global:Data, $global:BuildingData)
 
     # Main game loop using non-blocking key detection
     while ($global:GameState.Running) {
         # Update the display if flagged
         if ($global:GameState.UpdateScreen) {
-            $screen.Show($global:Data, $global:BuildingData)
+            #$screen.Show($global:Data, $global:BuildingData)
+            $screen.Update($global:Data, $global:BuildingData)
+            [Terminal.Gui.Application]::Refresh()
             $global:GameState.UpdateScreen = $false
         }
 
@@ -81,71 +159,17 @@ function Start-IdleClickerGame {
                 $global:Keys.R.Key {
                     Reset-IdleClickerGame
                 }
-                $global:Keys.D1.Key {
-                    $global:BuildingData.Cursor.BuyBuilding()
-                }
-                $global:Keys.D2.Key {
-                    $global:BuildingData.Grandma.BuyBuilding()
-                }
-                $global:Keys.D3.Key {
-                    $global:BuildingData.Farm.BuyBuilding()
-                }
-                $global:Keys.D4.Key {
-                    $global:BuildingData.Mine.BuyBuilding()
-                }
-                $global:Keys.D5.Key {
-                    $global:BuildingData.Factory.BuyBuilding()
-                }
-                $global:Keys.D6.Key {
-                    $global:BuildingData.Bank.BuyBuilding()
-                }
-                $global:Keys.D7.Key {
-                    $global:BuildingData.Temple.BuyBuilding()
-                }
-                $global:Keys.D8.Key {
-                    $global:BuildingData.WizardTower.BuyBuilding()
-                }
-                $global:Keys.D9.Key {
-                    $global:BuildingData.Shipment.BuyBuilding()
-                }
-                $global:Keys.D0.Key {
-                    $global:BuildingData.AlchemyLab.BuyBuilding()
-                }
-                $global:Keys.N1.Key {
-                    $global:BuildingData.Portal.BuyBuilding()
-                }
-                $global:Keys.N2.Key {
-                    $global:BuildingData.TimeMachine.BuyBuilding()
-                }
-                $global:Keys.N3.Key {
-                    $global:BuildingData.AntimatterCondenser.BuyBuilding()
-                }
-                $global:Keys.N4.Key {
-                    $global:BuildingData.Prism.BuyBuilding()
-                }
-                $global:Keys.N5.Key {
-                    $global:BuildingData.Chancemaker.BuyBuilding()
-                }
-                $global:Keys.N6.Key {
-                    $global:BuildingData.FractalEngine.BuyBuilding()
-                }
-                $global:Keys.N7.Key {
-                    $global:BuildingData.JavascriptConsole.BuyBuilding()
-                }
-                $global:Keys.N8.Key {
-                    $global:BuildingData.Idleverse.BuyBuilding()
-                }
-                $global:Keys.N9.Key {
-                    $global:BuildingData.CortexBaker.BuyBuilding()
-                }
-                $global:Keys.N0.Key {
-                    $global:BuildingData.You.BuyBuilding()
-                }
                 $global:Keys.Escape.Key {
                     $global:GameState.Running = $false
                 }
                 default {
-                    Write-host $key.Key
+                    $buildingMatch = $buildings | Where-Object { $_.Key.Key -eq $key.Key }
+                    if ($buildingMatch) {
+                        $buildingMatch.BuyBuilding()
+                    }
+                    else {
+                        Write-host $key.Key
+                    }
                 }
             }
         }
@@ -155,6 +179,8 @@ function Start-IdleClickerGame {
 }
 
 function Stop-IdleClickerGame {
+    [Terminal.Gui.Application]::Shutdown()
+    
     if (-not $global:GameState.Running) {
         Write-Host "The game is not running."
         return
@@ -172,8 +198,19 @@ function Stop-IdleClickerGame {
 function Reset-IdleClickerGame {
     # Reset the game state to its defaults
     $global:Data = [IdleGameData]::new()
-    $global:BuildingData = [BuildingData]::new()
+    $global:BuildingData = $resetBuildingsState
     Write-Host "Game has been reset."
 }
 
-Export-ModuleMember -Function Start-IdleClickerGame, Stop-IdleClickerGame, Reset-IdleClickerGame, Save-IdleClickerGame, Load-IdleClickerGame
+$exportModuleMemberParams = @{
+    Function = @(
+        'Start-IdleClickerGame'
+        'Start-IdleClickerGame2'
+        'Stop-IdleClickerGame'
+        'Reset-IdleClickerGame'
+        'Save-IdleClickerGame'
+        'Load-IdleClickerGame'
+    )
+}
+
+Export-ModuleMember @exportModuleMemberParams

@@ -1,0 +1,1 @@
+$global:BuildingData.AlchemyLab = [BuildingDefinition]::new("Alchemy Lab", 75000000000, 1600000, $global:Keys.D0)

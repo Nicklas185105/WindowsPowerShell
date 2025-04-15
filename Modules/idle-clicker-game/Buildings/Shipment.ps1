@@ -1,0 +1,1 @@
+$global:BuildingData.Shipment = [BuildingDefinition]::new("Shipment", 5100000000, 260000, $global:Keys.D9)

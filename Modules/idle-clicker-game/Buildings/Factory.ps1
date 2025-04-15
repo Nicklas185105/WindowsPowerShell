@@ -1,0 +1,1 @@
+$global:BuildingData.Factory = [BuildingDefinition]::new("Factory", 130000, 260, $global:Keys.D5)

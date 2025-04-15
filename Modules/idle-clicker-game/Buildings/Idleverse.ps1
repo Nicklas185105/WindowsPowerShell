@@ -1,0 +1,1 @@
+$global:BuildingData.Idleverse = [BuildingDefinition]::new("Idleverse", 12000000000000000000000, 8300000000000, $global:Keys.N8)
