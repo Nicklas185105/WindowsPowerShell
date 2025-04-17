@@ -48,6 +48,9 @@ class BuildingDefinition {
 			$global:Data.Clicks -= $price
 			$this.Owned += 1
 			$global:Data.UpdateIdleIncomeValue()
+			$shopInfo = (FormatShopItem $this.Name $this.Owned (FormatLargeNumber $this.GetCurrentPrice()))
+			$this.OwnedLabel.Text = ($shopInfo[0])
+			$this.PriceLabel.Text = ($shopInfo[1])
 		}
 	}
 
@@ -55,7 +58,7 @@ class BuildingDefinition {
 		return "$($this.Name)"
 	}
 
-	[BuildingDefinition] Setup([string[]]$shopInfo){
+	[BuildingDefinition] Setup([string[]]$shopInfo) {
 		$this.OwnedLabel = New-Object Label ($shopInfo[0])
 		$this.OwnedLabel.X = 1; $this.OwnedLabel.Y = 0
 		$this.PriceLabel = New-Object Label ($shopInfo[1])
@@ -64,11 +67,6 @@ class BuildingDefinition {
 		$this.BuyButton.X = 1
 		$this.BuyButton.Y = 1
 		return $this
-	}
-
-	[void] Update([string[]]$shopInfo){
-		$this.OwnedLabel.Text = ($shopInfo[0])
-		$this.PriceLabel.Text = ($shopInfo[1])
 	}
 }
 

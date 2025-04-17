@@ -4,7 +4,7 @@ using namespace Terminal.Gui
 
 class GameScreen {
 	[int]$LeftWidth = 32
-	[int]$RightWidth = 32
+	[int]$RightWidth = 34
 	[string]$LeftBorder
 	[string]$RightBorder
 
@@ -29,79 +29,12 @@ class GameScreen {
 		return (" " * $leftPad) + $Text + (" " * $rightPad)
 	}
 
-	[string[]] FormatShopItem([string]$name, $owned, $price) {
-		# First line: name left-aligned in 25 characters, owned count right-aligned in 6 characters.
-		$line1 = "{0,-20}{1,6}" -f $name, $owned
-		# Second line: the cost, right-aligned in the full right column, with " p" appended.
-		$line2 = "{0,10} p" -f $price
-		return @($line1, $line2)
-	}
-
-	[string] GetDecimal([decimal]$number) {
-		if ($number -lt 10) {
-			return 1
-		}
-		else {
-			return 0
-		}
-	}
-
-	[string] FormatLargeNumber([decimal]$number) {
-		if ($number -lt 1e3) {
-			$decimals = $this.GetDecimal($number)
-			return $number.ToString("F$decimals")
-		}
-		elseif ($number -lt 1e6) {
-			$val = $number / 1e3
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}K" -f $val)
-		}
-		elseif ($number -lt 1e9) {
-			$val = $number / 1e6
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}M" -f $val)
-		}
-		elseif ($number -lt 1e12) {
-			$val = $number / 1e9
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}B" -f $val)
-		}
-		elseif ($number -lt 1e15) {
-			$val = $number / 1e12
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}T" -f $val)
-		}
-		elseif ($number -lt 1e18) {
-			$val = $number / 1e15
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}Qa" -f $val)
-		}
-		elseif ($number -lt 1e21) {
-			$val = $number / 1e18
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}Qi" -f $val)
-		}
-		elseif ($number -lt 1e24) {
-			$val = $number / 1e21
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}Sx" -f $val)
-		}
-		elseif ($number -lt 1e27) {
-			$val = $number / 1e24
-			$decimals = $this.GetDecimal($val)
-			return ("{0:F$decimals}Sp" -f $val)
-		}
-		else {
-			return $number.ToString("E1")
-		}
-	}
-
 	[void] Update([object]$gameData, [object]$buildings) {
 		# Update the labels with the new gameData values
-		$pointsStr = $this.FormatLargeNumber($gameData.Clicks) + " p"
+		$pointsStr = (FormatLargeNumber $gameData.Clicks) + " p"
 		$this.PointsLabel.Text = $this.CenterText($pointsStr, $this.LeftWidth)
 
-		$idleStr = $this.FormatLargeNumber($gameData.IdleIncome) + " p/s"
+		$idleStr = (FormatLargeNumber $gameData.IdleIncome) + " p/s"
 		$this.IdleLabel.Text = $this.CenterText($idleStr, $this.LeftWidth)
 
 		if ($gameData.LastSaveTime) {
@@ -149,14 +82,14 @@ class GameScreen {
 		$leftPanel.Add($sepLabel)
 
 		# Points
-		$pointsStr = $this.FormatLargeNumber($gameData.Clicks) + " p"
+		$pointsStr = (FormatLargeNumber $gameData.Clicks) + " p"
 		$this.PointsLabel = New-Object Label ($this.CenterText($pointsStr, $this.LeftWidth))
 		$this.PointsLabel.X = [Pos]::Center()
 		$this.PointsLabel.Y = 4
 		$leftPanel.Add($this.PointsLabel)
 
 		# Production rate
-		$idleStr = $this.FormatLargeNumber($gameData.IdleIncome) + " p/s"
+		$idleStr = (FormatLargeNumber $gameData.IdleIncome) + " p/s"
 		$this.IdleLabel = New-Object Label ($this.CenterText($idleStr, $this.LeftWidth))
 		$this.IdleLabel.X = [Pos]::Center()
 		$this.IdleLabel.Y = 6
@@ -246,53 +179,35 @@ class GameScreen {
 		$midpoint = [math]::Ceiling($totalCount / 2)
 
 		# Fill the first shop column.
+		$scrollView = New-Object Terminal.Gui.ScrollView
+		$scrollView.AutoHideScrollBars = $true
+		$scrollView.ShowVerticalScrollIndicator = $true
+		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $midpoint * 4 - 1)
+		$scrollView.Width = [Dim]::Fill()
+		$scrollView.Height = [Dim]::Fill()
 		$yPos = 0
 		for ($i = 0; $i -lt $midpoint; $i++) {
 			$bd = $properties[$i].Value
-			# $shopInfo = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
-			# $label1 = New-Object Label ($shopInfo[0])
-			# $label1.X = 1; $label1.Y = $yPos
-			# $shopPanelLeft.Add($label1)
-			# $yPos++
-			# $label2 = New-Object Label ($shopInfo[1])
-			# $label2.X = 1; $label2.Y = $yPos
-			# $shopPanelLeft.Add($label2)
-			# $yPos += 2
 			$panel = New-Object FrameView
 			$panel.Height = 4
 			$panel.Width = [Dim]::Fill()
 			$panel.X = [Pos]::At(1)
 			$panel.Y = $yPos
 			$yPos += 4
-			$shopInfo = $this.FormatShopItem($bd.Name, $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
-			# $bd.OwnedLabel = New-Object Label ($shopInfo[0])
-			# $bd.OwnedLabel.X = 1; $bd.OwnedLabel.Y = 0
-			# $panel.Add($bd.OwnedLabel)
-			# $bd.PriceLabel = New-Object Label ($shopInfo[1])
-			# $bd.PriceLabel.X = 1; $bd.PriceLabel.Y = 1
-			# $panel.Add($bd.PriceLabel)
-			# $yPos += 4
-			# $bd.BuyButton = New-Object Button
-			# $bd.BuyButton.Text = ""
-			# $bd.BuyButton.X = 0
-			# $bd.BuyButton.Y = 0
-			# $bd.BuyButton.Width = [Terminal.Gui.Dim]::Fill()
-			# $bd.BuyButton.Height = [Terminal.Gui.Dim]::Fill()
-			# $bd.BuyButton.CanFocus = $false
-			# $bd.BuyButton.NoDecoraction = $true
-			# $bd.BuyButton.NoPadding = $true
+			$shopInfo = (FormatShopItem $bd.Name $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
 			$building = $bd.Setup($shopInfo)
 			$panel.Add($building.OwnedLabel)
 			$panel.Add($building.BuyButton)
 			$panel.Add($building.PriceLabel)
-			$shopPanelLeft.Add($panel)
+			$scrollView.Add($panel)
 		}
+		$shopPanelLeft.Add($scrollView)
 
 		# Fill the second shop column.
 		$yPos = 1
 		for ($i = $midpoint; $i -lt $totalCount; $i++) {
 			$bd = $properties[$i].Value
-			$shopInfo = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+			$shopInfo = (FormatShopItem $bd.GetPrintName() $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
 			$label1 = New-Object Label ($shopInfo[0])
 			$label1.X = 1; $label1.Y = $yPos
 			$shopPanelRight.Add($label1)

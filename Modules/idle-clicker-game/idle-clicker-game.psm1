@@ -19,6 +19,7 @@ else {
 Add-Type -Path $dllPath
 [Reflection.Assembly]::LoadFrom($dllPath) | Out-Null
 
+. $PSScriptRoot\Utils.ps1
 . $PSScriptRoot\UpgradeDefinition.ps1
 . $PSScriptRoot\Keys.ps1
 . $PSScriptRoot\BuildingDefinition.ps1
@@ -105,24 +106,26 @@ function Start-IdleClickerGame {
 			$global:GameState.UpdateScreen = $true
 		})
 
-    # Setup buildings click function
-    # foreach ($property in $global:BuildingData.PSObject.Properties){
-    #     $bd = $property.Value
-    #     $bd.BuyButton.Add_Clicked({
-    #         $bd.BuyBuilding()
-    #         [Terminal.Gui.Application]::MainLoop.Invoke({
-    #             $shopInfo = $screen.FormatShopItem($bd.Name, $bd.Owned, $screen.FormatLargeNumber($bd.GetCurrentPrice()))
-    #             $bd.Update($shopInfo[0])
-    #         })
-    #     })
-    # }
-    $global:BuildingData.Cursor.BuyButton.Add_Clicked({
-        $global:BuildingData.Cursor.BuyBuilding()
-        [Terminal.Gui.Application]::MainLoop.Invoke({
-            $shopInfo = $screen.FormatShopItem($global:BuildingData.Cursor.Name, $global:BuildingData.Cursor.Owned, $screen.FormatLargeNumber($global:BuildingData.Cursor.GetCurrentPrice()))
-            $global:BuildingData.Cursor.Update($shopInfo)
-        })
-    })
+	# Setup buildings click function
+	$global:BuildingData.Cursor.BuyButton.Add_Clicked({ $global:BuildingData.Cursor.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Grandma.BuyButton.Add_Clicked({ $global:BuildingData.Grandma.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Farm.BuyButton.Add_Clicked({ $global:BuildingData.Farm.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Mine.BuyButton.Add_Clicked({ $global:BuildingData.Mine.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Factory.BuyButton.Add_Clicked({ $global:BuildingData.Factory.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Bank.BuyButton.Add_Clicked({ $global:BuildingData.Bank.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Temple.BuyButton.Add_Clicked({ $global:BuildingData.Temple.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.WizardTower.BuyButton.Add_Clicked({ $global:BuildingData.WizardTower.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Shipment.BuyButton.Add_Clicked({ $global:BuildingData.Shipment.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.AlchemyLab.BuyButton.Add_Clicked({ $global:BuildingData.AlchemyLab.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Portal.BuyButton.Add_Clicked({ $global:BuildingData.Portal.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.TimeMachine.BuyButton.Add_Clicked({ $global:BuildingData.TimeMachine.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.AntimatterCondenser.BuyButton.Add_Clicked({ $global:BuildingData.AntimatterCondenser.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Prism.BuyButton.Add_Clicked({ $global:BuildingData.Prism.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Chancemaker.BuyButton.Add_Clicked({ $global:BuildingData.Chancemaker.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.FractalEngine.BuyButton.Add_Clicked({ $global:BuildingData.FractalEngine.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.JavascriptConsole.BuyButton.Add_Clicked({ $global:BuildingData.JavascriptConsole.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.CortexBaker.BuyButton.Add_Clicked({ $global:BuildingData.CortexBaker.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.You.BuyButton.Add_Clicked({ $global:BuildingData.You.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
 
 	# --- Add a repeating timer to update dynamic UI elements ---
 	# This uses Terminal.Gui's MainLoop.AddTimer.
@@ -275,6 +278,8 @@ $exportModuleMemberParams = @{
 		'Reset-IdleClickerGame'
 		'Save-IdleClickerGame'
 		'Load-IdleClickerGame'
+		'FormatLargeNumber'
+		'FormatShopItem'
 	)
 }
 
