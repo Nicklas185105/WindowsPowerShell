@@ -4,7 +4,7 @@ using namespace Terminal.Gui
 
 class GameScreen {
 	[int]$LeftWidth = 32
-	[int]$RightWidth = 35
+	[int]$RightWidth = 32
 	[string]$LeftBorder
 	[string]$RightBorder
 
@@ -29,11 +29,11 @@ class GameScreen {
 		return (" " * $leftPad) + $Text + (" " * $rightPad)
 	}
 
-	[string[]] FormatShopItem([string]$name, $owned, [string]$price) {
+	[string[]] FormatShopItem([string]$name, $owned, $price) {
 		# First line: name left-aligned in 25 characters, owned count right-aligned in 6 characters.
-		$line1 = "{0,-25}{1,6}" -f $name, $owned
+		$line1 = "{0,-20}{1,6}" -f $name, $owned
 		# Second line: the cost, right-aligned in the full right column, with " p" appended.
-		$line2 = "{0,$($this.RightWidth-1)}" -f ("{0} p" -f $price)
+		$line2 = "{0,10} p" -f $price
 		return @($line1, $line2)
 	}
 
@@ -246,18 +246,46 @@ class GameScreen {
 		$midpoint = [math]::Ceiling($totalCount / 2)
 
 		# Fill the first shop column.
-		$yPos = 1
+		$yPos = 0
 		for ($i = 0; $i -lt $midpoint; $i++) {
 			$bd = $properties[$i].Value
-			$shopInfo = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
-			$label1 = New-Object Label ($shopInfo[0])
-			$label1.X = 1; $label1.Y = $yPos
-			$shopPanelLeft.Add($label1)
-			$yPos++
-			$label2 = New-Object Label ($shopInfo[1])
-			$label2.X = 1; $label2.Y = $yPos
-			$shopPanelLeft.Add($label2)
-			$yPos += 2
+			# $shopInfo = $this.FormatShopItem($bd.GetPrintName(), $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+			# $label1 = New-Object Label ($shopInfo[0])
+			# $label1.X = 1; $label1.Y = $yPos
+			# $shopPanelLeft.Add($label1)
+			# $yPos++
+			# $label2 = New-Object Label ($shopInfo[1])
+			# $label2.X = 1; $label2.Y = $yPos
+			# $shopPanelLeft.Add($label2)
+			# $yPos += 2
+			$panel = New-Object FrameView
+			$panel.Height = 4
+			$panel.Width = [Dim]::Fill()
+			$panel.X = [Pos]::At(1)
+			$panel.Y = $yPos
+			$yPos += 4
+			$shopInfo = $this.FormatShopItem($bd.Name, $bd.Owned, $this.FormatLargeNumber($bd.GetCurrentPrice()))
+			# $bd.OwnedLabel = New-Object Label ($shopInfo[0])
+			# $bd.OwnedLabel.X = 1; $bd.OwnedLabel.Y = 0
+			# $panel.Add($bd.OwnedLabel)
+			# $bd.PriceLabel = New-Object Label ($shopInfo[1])
+			# $bd.PriceLabel.X = 1; $bd.PriceLabel.Y = 1
+			# $panel.Add($bd.PriceLabel)
+			# $yPos += 4
+			# $bd.BuyButton = New-Object Button
+			# $bd.BuyButton.Text = ""
+			# $bd.BuyButton.X = 0
+			# $bd.BuyButton.Y = 0
+			# $bd.BuyButton.Width = [Terminal.Gui.Dim]::Fill()
+			# $bd.BuyButton.Height = [Terminal.Gui.Dim]::Fill()
+			# $bd.BuyButton.CanFocus = $false
+			# $bd.BuyButton.NoDecoraction = $true
+			# $bd.BuyButton.NoPadding = $true
+			$building = $bd.Setup($shopInfo)
+			$panel.Add($building.OwnedLabel)
+			$panel.Add($building.BuyButton)
+			$panel.Add($building.PriceLabel)
+			$shopPanelLeft.Add($panel)
 		}
 
 		# Fill the second shop column.

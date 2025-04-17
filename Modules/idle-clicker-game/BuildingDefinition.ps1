@@ -1,4 +1,5 @@
-# The static definition for a building.
+using namespace Terminal.Gui
+
 class BuildingDefinition {
 	[string]$Name
 	[decimal]$BaseCost
@@ -6,6 +7,10 @@ class BuildingDefinition {
 	[int]$Owned
 	[KeyDefinition]$Key
 	[UpgradeDefinition[]]$Upgrades
+
+	[Label]$PriceLabel
+	[Label]$OwnedLabel
+	[Button]$BuyButton
 
 	BuildingDefinition([string]$name, [decimal]$baseCost, [decimal]$income, [KeyDefinition]$key, [int]$owned) {
 		$this.Name = $name
@@ -47,7 +52,23 @@ class BuildingDefinition {
 	}
 
 	[string] GetPrintName() {
-		return "$($this.Name) ($($this.Key.Name))"
+		return "$($this.Name)"
+	}
+
+	[BuildingDefinition] Setup([string[]]$shopInfo){
+		$this.OwnedLabel = New-Object Label ($shopInfo[0])
+		$this.OwnedLabel.X = 1; $this.OwnedLabel.Y = 0
+		$this.PriceLabel = New-Object Label ($shopInfo[1])
+		$this.PriceLabel.X = 15; $this.PriceLabel.Y = 1
+		$this.BuyButton = New-Object Button "Buy"
+		$this.BuyButton.X = 1
+		$this.BuyButton.Y = 1
+		return $this
+	}
+
+	[void] Update([string[]]$shopInfo){
+		$this.OwnedLabel.Text = ($shopInfo[0])
+		$this.PriceLabel.Text = ($shopInfo[1])
 	}
 }
 

@@ -105,6 +105,25 @@ function Start-IdleClickerGame {
 			$global:GameState.UpdateScreen = $true
 		})
 
+    # Setup buildings click function
+    # foreach ($property in $global:BuildingData.PSObject.Properties){
+    #     $bd = $property.Value
+    #     $bd.BuyButton.Add_Clicked({
+    #         $bd.BuyBuilding()
+    #         [Terminal.Gui.Application]::MainLoop.Invoke({
+    #             $shopInfo = $screen.FormatShopItem($bd.Name, $bd.Owned, $screen.FormatLargeNumber($bd.GetCurrentPrice()))
+    #             $bd.Update($shopInfo[0])
+    #         })
+    #     })
+    # }
+    $global:BuildingData.Cursor.BuyButton.Add_Clicked({
+        $global:BuildingData.Cursor.BuyBuilding()
+        [Terminal.Gui.Application]::MainLoop.Invoke({
+            $shopInfo = $screen.FormatShopItem($global:BuildingData.Cursor.Name, $global:BuildingData.Cursor.Owned, $screen.FormatLargeNumber($global:BuildingData.Cursor.GetCurrentPrice()))
+            $global:BuildingData.Cursor.Update($shopInfo)
+        })
+    })
+
 	# --- Add a repeating timer to update dynamic UI elements ---
 	# This uses Terminal.Gui's MainLoop.AddTimer.
 	[Terminal.Gui.Application]::MainLoop.AddTimeout([TimeSpan]::FromMilliseconds(1), {
