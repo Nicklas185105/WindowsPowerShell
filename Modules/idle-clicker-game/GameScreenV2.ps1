@@ -12,9 +12,15 @@ class GameScreen {
 
 	# Keep references to UI Elements so we can update them later:
 	[Button]$ClickButton
+	[Button]$SaveButton
+	[Button]$LoadButton
+	[Button]$ResetButton
+	[Button]$ExitButton
 	[Label]$PointsLabel
 	[Label]$IdleLabel
 	[Label]$LastSaveLabel
+
+	[Label]$InfoLabel
 
 	GameScreen() {
 		$this.LeftBorder = "*" * $this.LeftWidth
@@ -58,92 +64,78 @@ class GameScreen {
 		##########################################################
 		# Left Panel – Game Stats
 		##########################################################
-		$leftPanel = New-Object FrameView "Stats"
-		$leftPanel.X = 0
-		$leftPanel.Y = 0
-		$leftPanel.Width = $this.LeftWidth
-		$leftPanel.Height = [Dim]::Fill()
+		$statsPanel = New-Object FrameView "Stats"
+		$statsPanel.X = 0
+		$statsPanel.Y = 0
+		$statsPanel.Width = $this.LeftWidth
+		$statsPanel.Height = [Dim]::Fill()
 
 		# Title and Name labels.
 		$titleLabel = New-Object Label ($this.CenterText("Factory", $this.LeftWidth))
 		$titleLabel.X = [Pos]::Center()
-		$titleLabel.Y = 1
-		$leftPanel.Add($titleLabel)
+		$titleLabel.Y = [Pos]::At(1)
+		$statsPanel.Add($titleLabel)
 
 		$nameLabel = New-Object Label ($this.CenterText("Name", $this.LeftWidth))
 		$nameLabel.X = [Pos]::Center()
-		$nameLabel.Y = 2
-		$leftPanel.Add($nameLabel)
+		$nameLabel.Y = [Pos]::At(2)
+		$statsPanel.Add($nameLabel)
 
 		# Separator line.
 		$sepLabel = New-Object Label ($this.LeftBorder)
 		$sepLabel.X = [Pos]::Center()
-		$sepLabel.Y = 3
-		$leftPanel.Add($sepLabel)
+		$sepLabel.Y = [Pos]::At(3)
+		$statsPanel.Add($sepLabel)
 
 		# Points
 		$pointsStr = (FormatLargeNumber $gameData.Clicks) + " p"
 		$this.PointsLabel = New-Object Label ($this.CenterText($pointsStr, $this.LeftWidth))
 		$this.PointsLabel.X = [Pos]::Center()
-		$this.PointsLabel.Y = 4
-		$leftPanel.Add($this.PointsLabel)
+		$this.PointsLabel.Y = [Pos]::At(5)
+		$statsPanel.Add($this.PointsLabel)
 
 		# Production rate
 		$idleStr = (FormatLargeNumber $gameData.IdleIncome) + " p/s"
 		$this.IdleLabel = New-Object Label ($this.CenterText($idleStr, $this.LeftWidth))
 		$this.IdleLabel.X = [Pos]::Center()
-		$this.IdleLabel.Y = 6
-		$leftPanel.Add($this.IdleLabel)
+		$this.IdleLabel.Y = [Pos]::At(7)
+		$statsPanel.Add($this.IdleLabel)
 
 		# Click button
 		$this.ClickButton = New-Object Button "Click Me"
 		$this.ClickButton.X = [Pos]::Center()
-		$this.ClickButton.Y = 10
-		$leftPanel.Add($this.ClickButton)
+		$this.ClickButton.Y = [Pos]::At(10)
+		$statsPanel.Add($this.ClickButton)
 
-		# Keys and other text.
-		$keysY = 15
+		# Save button
+		$this.SaveButton = New-Object Button "Save Game"
+		$this.SaveButton.X = [Pos]::At(1)
+		$this.SaveButton.Y = [Pos]::At(13)
+		$statsPanel.Add($this.SaveButton)
 
-		$labelKeys = New-Object Label ("Keys".PadRight($this.LeftWidth))
-		$labelKeys.X = 0; $labelKeys.Y = $keysY
-		$leftPanel.Add($labelKeys)
-		$keysY++
+		# Load button
+		$this.LoadButton = New-Object Button "Load Game"
+		$this.LoadButton.X = [Pos]::At(16)
+		$this.LoadButton.Y = [Pos]::At(13)
+		$statsPanel.Add($this.LoadButton)
 
-		$labelSpace = New-Object Label ("$($global:Keys.Space.Name): Click".PadRight($this.LeftWidth))
-		$labelSpace.X = 0; $labelSpace.Y = $keysY
-		$leftPanel.Add($labelSpace)
-		$keysY++
+		# Reset button
+		$this.ResetButton = New-Object Button "Reset Game"
+		$this.ResetButton.X = [Pos]::At(1)
+		$this.ResetButton.Y = [Pos]::At(14)
+		$statsPanel.Add($this.ResetButton)
 
-		$labelReset = New-Object Label ("$($global:Keys.R.Name): Reset game".PadRight($this.LeftWidth))
-		$labelReset.X = 0; $labelReset.Y = $keysY
-		$leftPanel.Add($labelReset)
-		$keysY++
-
-		$labelSave = New-Object Label ("$($global:Keys.S.Name): Save game".PadRight($this.LeftWidth))
-		$labelSave.X = 0; $labelSave.Y = $keysY
-		$leftPanel.Add($labelSave)
-		$keysY++
-
-		$labelLoad = New-Object Label ("$($global:Keys.L.Name): Load game".PadRight($this.LeftWidth))
-		$labelLoad.X = 0; $labelLoad.Y = $keysY
-		$leftPanel.Add($labelLoad)
-		$keysY++
-
-		$labelQuit = New-Object Label ("$($global:Keys.Escape.Name): Quit game".PadRight($this.LeftWidth))
-		$labelQuit.X = 0; $labelQuit.Y = $keysY
-		$leftPanel.Add($labelQuit)
-		$keysY++
-
-		$labelCtrlC = New-Object Label ("(don't do ctrl+C)".PadRight($this.LeftWidth))
-		$labelCtrlC.X = 0; $labelCtrlC.Y = $keysY
-		$leftPanel.Add($labelCtrlC)
-		$keysY += 5
+		# Quit button
+		$this.ExitButton = New-Object Button "Quit Game"
+		$this.ExitButton.X = [Pos]::At(16)
+		$this.ExitButton.Y = [Pos]::At(14)
+		$statsPanel.Add($this.ExitButton)
 
 		# Last save info.
-		$labelLastSave = New-Object Label ("Since last save".PadRight($this.LeftWidth))
-		$labelLastSave.X = 0; $labelLastSave.Y = $keysY
-		$leftPanel.Add($labelLastSave)
-		$keysY++
+		$labelLastSave = New-Object Label ($this.CenterText("Since last save", $this.LeftWidth))
+		$labelLastSave.X = [Pos]::Center()
+		$labelLastSave.Y = [Pos]::At(15)
+		$statsPanel.Add($labelLastSave)
 
 		if ($gameData.LastSaveTime) {
 			$elapsed = (Get-Date).Subtract([DateTime]::ParseExact($gameData.LastSaveTime, "HH:mm:ss", [System.Globalization.CultureInfo]::InvariantCulture))
@@ -152,90 +144,116 @@ class GameScreen {
 		else {
 			$timeStr = "Not saved yet"
 		}
-		$this.LastSaveLabel = New-Object Label ($timeStr.PadRight($this.LeftWidth))
-		$this.LastSaveLabel.X = 0; $this.LastSaveLabel.Y = $keysY
-		$leftPanel.Add($this.LastSaveLabel)
+		$this.LastSaveLabel = New-Object Label ($this.CenterText(("{0,15}" -f $timeStr), $this.LeftWidth))
+		$this.LastSaveLabel.X = [Pos]::At(11)
+		$this.LastSaveLabel.Y = [Pos]::At(16)
+		$statsPanel.Add($this.LastSaveLabel)
+
+		# Info label
+		$this.InfoLabel = New-Object Label([Rect]::new(0, 0, $this.LeftWidth, 1), '')
+		$this.InfoLabel.ColorScheme = [ColorScheme]::Focus
+		$this.InfoLabel.X = [Pos]::At(0)
+		$this.InfoLabel.Y = [Pos]::At(18)
+		$this.InfoLabel.Text = "Click '?' button for more info asd"
+		$this.InfoLabel.Width = [Dim]::Fill()
+		$this.InfoLabel.Height = 10
+		$statsPanel.Add($this.InfoLabel)
 
 		##########################################################
-		# Right Panels – Shop/Buildings (Two Columns)
+		# Buildings Panel
 		##########################################################
-		# First right column panel
-		$shopPanelLeft = New-Object FrameView "Shop Column 1"
-		$shopPanelLeft.X = [Pos]::At($this.LeftWidth + 1)
-		$shopPanelLeft.Y = 0
-		$shopPanelLeft.Width = $this.RightWidth
-		$shopPanelLeft.Height = [Dim]::Fill()
-
-		# Second right column panel
-		$shopPanelRight = New-Object FrameView "Shop Column 2"
-		$shopPanelRight.X = [Pos]::At($this.LeftWidth + $this.RightWidth + 2)
-		$shopPanelRight.Y = 0
-		$shopPanelRight.Width = $this.RightWidth
-		$shopPanelRight.Height = [Dim]::Fill()
+		$buildingsPanel = New-Object FrameView "Buildings"
+		$buildingsPanel.X = [Pos]::At($this.LeftWidth + 1); $buildingsPanel.Y = [Pos]::At(0)
+		$buildingsPanel.Width = $this.RightWidth; $buildingsPanel.Height = [Dim]::Fill()
 
 		# Get the building definitions.
 		$properties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
 		$totalCount = $properties.Count
-		$midpoint = [math]::Ceiling($totalCount / 2)
 
-		# Fill the first shop column.
-		$scrollView = New-Object Terminal.Gui.ScrollView
+		# Create a scrollable view for the buildings.
+		$scrollView = New-Object ScrollView
 		$scrollView.AutoHideScrollBars = $true
 		$scrollView.ShowVerticalScrollIndicator = $true
-		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $midpoint * 4 - 1)
-		$scrollView.Width = [Dim]::Fill()
-		$scrollView.Height = [Dim]::Fill()
+		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalCount * 4 - 1)
+		$scrollView.Width = [Dim]::Fill(); $scrollView.Height = [Dim]::Fill()
 		$yPos = 0
-		for ($i = 0; $i -lt $midpoint; $i++) {
+		for ($i = 0; $i -lt $totalCount; $i++) {
 			$bd = $properties[$i].Value
-			$panel = New-Object FrameView
-			$panel.Height = 4
-			$panel.Width = [Dim]::Fill()
-			$panel.X = [Pos]::At(1)
-			$panel.Y = $yPos
+			$panel = New-Object FrameView; $panel.Height = 4; $panel.Width = [Dim]::Fill()
+			$panel.X = [Pos]::At(1); $panel.Y = [Pos]::At($yPos)
 			$yPos += 4
 			$shopInfo = (FormatShopItem $bd.Name $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
 			$building = $bd.Setup($shopInfo)
-			$panel.Add($building.OwnedLabel)
-			$panel.Add($building.BuyButton)
-			$panel.Add($building.PriceLabel)
+			$panel.Add($building.OwnedLabel, $building.BuyButton, $building.InfoButton, $building.PriceLabel)
 			$scrollView.Add($panel)
 		}
-		$shopPanelLeft.Add($scrollView)
+		$buildingsPanel.Add($scrollView)
 
-		# Fill the second shop column.
-		$yPos = 1
-		for ($i = $midpoint; $i -lt $totalCount; $i++) {
+		##########################################################
+		# Upgrades Panel
+		##########################################################
+		$upgradesPanel = New-Object FrameView "Upgrades"
+		$upgradesPanel.X = [Pos]::At($this.LeftWidth + $this.RightWidth + 2)
+		$upgradesPanel.Y = [Pos]::At(0)
+		$upgradesPanel.Width = $this.RightWidth
+		$upgradesPanel.Height = [Dim]::Fill()
+
+		# Create a scrollable view for the upgrades.
+		$scrollView = New-Object ScrollView
+		$scrollView.AutoHideScrollBars = $true
+		$scrollView.ShowVerticalScrollIndicator = $true
+		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalCount * 4 - 1)
+		$scrollView.Width = [Dim]::Fill()
+		$scrollView.Height = [Dim]::Fill()
+		$yPos = 0
+		for ($i = 0; $i -lt $totalCount; $i++) {
 			$bd = $properties[$i].Value
-			$shopInfo = (FormatShopItem $bd.GetPrintName() $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
-			$label1 = New-Object Label ($shopInfo[0])
-			$label1.X = 1; $label1.Y = $yPos
-			$shopPanelRight.Add($label1)
-			$yPos++
-			$label2 = New-Object Label ($shopInfo[1])
-			$label2.X = 1; $label2.Y = $yPos
-			$shopPanelRight.Add($label2)
-			$yPos += 2
+			foreach ($upgrade in $bd.Upgrades) {
+				$upgrade.Panel = New-Object FrameView
+				$upgrade.Panel.Height = 4
+				$upgrade.Panel.Width = [Dim]::Fill()
+				$upgrade.Panel.X = [Pos]::At(1)
+				$upgrade.Panel.Y = [Pos]::At($yPos)
+				$yPos += 4
+				$label = New-Object Label ("{0,-25}{1,6}" -f $upgrade.Name, (FormatLargeNumber $upgrade.BaseCost))
+				$label.X = [Pos]::At(1)
+				$label.Y = [Pos]::At(0)
+				$upgrade.Panel.Add($label)
+				$upgrade.BuyButton = New-Object Button "Buy"
+				$upgrade.BuyButton.X = 1
+				$upgrade.BuyButton.Y = 1
+				# $upgrade.BuyButton.Add_Clicked({ $this.Buy($bd); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+				$upgrade.InfoButton = New-Object Button "?"
+				$upgrade.InfoButton.X = 8
+				$upgrade.InfoButton.Y = 1
+				$upgrade.Panel.Add($upgrade.BuyButton)
+				$upgrade.Panel.Add($upgrade.InfoButton)
+				$scrollView.Add($upgrade.Panel)
+
+
+				# if (-not $upgrade.IsPurchased -and $upgrade.UnlockCondition.Invoke($bd)) {
+				# 	# Display the upgrade as available, or allow purchase.
+				# 	Write-Host "Upgrade available: $($upgrade.Name) for $($upgrade.BaseCost) clicks."
+
+				# 	# When purchasing (after verifying the player has enough clicks):
+				# 	# e.g. if ($global:Data.Clicks -ge $upgrade.BaseCost) {
+				# 	#          $global:Data.Clicks -= $upgrade.BaseCost
+				# 	#          $upgrade.Effect.Invoke($global:BuildingData.Cursor)
+				# 	#          $upgrade.IsPurchased = $true
+				# 	#      }
+				# }
+			}
 		}
+		$upgradesPanel.Add($scrollView)
 
 		# Add all panels to the main window.
-		$this.MainWindow.Add($leftPanel)
-		$this.MainWindow.Add($shopPanelLeft)
-		$this.MainWindow.Add($shopPanelRight)
-		# $this.Top.Add($mainWin)
+		$this.MainWindow.Add($statsPanel)
+		$this.MainWindow.Add($buildingsPanel)
+		$this.MainWindow.Add($upgradesPanel)
 
-		# # --- Add a repeating timer to update dynamic UI elements ---
-		# # This uses Terminal.Gui's MainLoop.AddTimer.
-		# $updateInterval = [TimeSpan]::FromSeconds(1)  # Update every second.
-		# $updateTimer = [Terminal.Gui.Application]::MainLoop.AddTimeout($updateInterval, {
-		#     param($timer)
-		#     # Use MainLoop.Invoke to schedule updates on the UI thread.
-		#     $this.Update($global:Data, $global:BuildingData)
-		#     return $true  # Return true to keep the timer active.
-		# })
-
-		# # Run the Terminal.Gui event loop.
-		# [Terminal.Gui.Application]::Run($top)
-		# [Terminal.Gui.Application]::Shutdown()
+		# Add all panels to the main window.
+		$this.MainWindow.Add($statsPanel)
+		$this.MainWindow.Add($buildingsPanel)
+		$this.MainWindow.Add($upgradesPanel)
 	}
 }

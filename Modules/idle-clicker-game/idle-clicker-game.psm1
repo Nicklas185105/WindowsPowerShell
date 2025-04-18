@@ -104,6 +104,21 @@ function Start-IdleClickerGame {
 	$screen.ClickButton.Add_Clicked({
 			$global:Data.Clicks += $global:Data.ClickValue
 			$global:GameState.UpdateScreen = $true
+			[Terminal.Gui.Application]::MainLoop.Invoke({})
+		})
+	$screen.SaveButton.Add_Clicked({
+			Save-IdleClickerGame
+			$global:GameState.UpdateScreen = $true
+			[Terminal.Gui.Application]::MainLoop.Invoke({})
+		})
+	$screen.LoadButton.Add_Clicked({
+			Load-IdleClickerGame
+			$global:GameState.UpdateScreen = $true
+			[Terminal.Gui.Application]::MainLoop.Invoke({})
+		})
+	$screen.ExitButton.Add_Clicked({
+			Stop-IdleClickerGame
+			[Terminal.Gui.Application]::MainLoop.Invoke({})
 		})
 
 	# Setup buildings click function
@@ -126,6 +141,27 @@ function Start-IdleClickerGame {
 	$global:BuildingData.JavascriptConsole.BuyButton.Add_Clicked({ $global:BuildingData.JavascriptConsole.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
 	$global:BuildingData.CortexBaker.BuyButton.Add_Clicked({ $global:BuildingData.CortexBaker.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
 	$global:BuildingData.You.BuyButton.Add_Clicked({ $global:BuildingData.You.BuyBuilding(); $screen.Update($global:Data, $global:BuildingData); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+
+	# Setup buildings info function
+	$global:BuildingData.Cursor.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Cursor.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Grandma.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Grandma.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Farm.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Farm.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Mine.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Mine.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Factory.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Factory.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Bank.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Bank.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Temple.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Temple.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.WizardTower.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.WizardTower.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Shipment.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Shipment.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.AlchemyLab.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.AlchemyLab.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Portal.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Portal.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.TimeMachine.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.TimeMachine.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.AntimatterCondenser.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.AntimatterCondenser.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Prism.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Prism.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.Chancemaker.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.Chancemaker.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.FractalEngine.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.FractalEngine.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.JavascriptConsole.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.JavascriptConsole.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.CortexBaker.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.CortexBaker.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
+	$global:BuildingData.You.InfoButton.Add_Clicked({ $screen.InfoLabel.Text = $global:BuildingData.You.GetInfo(); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
 
 	# --- Add a repeating timer to update dynamic UI elements ---
 	# This uses Terminal.Gui's MainLoop.AddTimer.

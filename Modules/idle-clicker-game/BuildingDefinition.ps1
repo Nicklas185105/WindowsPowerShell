@@ -11,6 +11,7 @@ class BuildingDefinition {
 	[Label]$PriceLabel
 	[Label]$OwnedLabel
 	[Button]$BuyButton
+	[Button]$InfoButton
 
 	BuildingDefinition([string]$name, [decimal]$baseCost, [decimal]$income, [KeyDefinition]$key, [int]$owned) {
 		$this.Name = $name
@@ -66,7 +67,23 @@ class BuildingDefinition {
 		$this.BuyButton = New-Object Button "Buy"
 		$this.BuyButton.X = 1
 		$this.BuyButton.Y = 1
+		$this.InfoButton = New-Object Button "?"
+		$this.InfoButton.X = 8
+		$this.InfoButton.Y = 1
 		return $this
+	}
+
+	[string] GetInfo() {
+		$info = @()
+		$info += "Name: {0,-26}" -f $this.Name
+		$info += "Base Income: {0,-19}" -f (FormatLargeNumber $this.Income)
+		$info += "Total Income: {0,-18}" -f (FormatLargeNumber $this.GetCurrentIncome())
+		if ($global:Data.IdleIncome -gt 0) {
+			$percentage = [math]::Round(($this.GetCurrentIncome() / $global:Data.IdleIncome) * 100, 2)
+			$info += "Percentage of Total Income: $($percentage)%"
+		}
+
+		return $info
 	}
 }
 
