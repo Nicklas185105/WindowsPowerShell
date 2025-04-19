@@ -3,7 +3,7 @@ using namespace Terminal.Gui
 class UpgradeDefinition {
 	[string]$Name
 	[int]$RequiredCount    # Minimum buildings owned to unlock the upgrade
-	[decimal]$BaseCost
+	[bigint]$BaseCost
 	[string]$Description
 	[int]$ID
 	[ScriptBlock]$Effect   # Code to apply the upgrade effect
@@ -14,7 +14,7 @@ class UpgradeDefinition {
 	[Button]$BuyButton
 	[Button]$InfoButton
 
-	UpgradeDefinition([string]$name, [int]$requiredCount, [decimal]$baseCost, [string]$description, [int]$id, [ScriptBlock]$effect) {
+	UpgradeDefinition([string]$name, [int]$requiredCount, [bigint]$baseCost, [string]$description, [int]$id, [ScriptBlock]$effect) {
 		$this.Name = $name
 		$this.RequiredCount = $requiredCount
 		$this.BaseCost = $baseCost
@@ -32,4 +32,22 @@ class UpgradeDefinition {
 			$this.IsPurchased = $true
 		}
 	}
+}
+
+class UpgradeData {
+	[UpgradeDefinition] $Plain
+	[UpgradeDefinition] $Berrylium
+	[UpgradeDefinition] $Blueberrylium
+	[UpgradeDefinition] $Chalcedhoney
+	[UpgradeDefinition] $Buttergold
+	[UpgradeDefinition] $Sugarmuck
+	[UpgradeDefinition] $Jetmint
+	[UpgradeDefinition] $Cherrysilver
+	[UpgradeDefinition] $Hazelrald
+	[UpgradeDefinition] $Mooncandy
+	[UpgradeDefinition] $Astrofudge
+	[UpgradeDefinition] $Alabascream
+	[UpgradeDefinition] $Iridyum
+	[UpgradeDefinition] $Glucosmium
+	[UpgradeDefinition] $Glimmeringue
 }

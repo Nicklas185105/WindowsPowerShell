@@ -6,7 +6,7 @@ class BuildingDefinition {
 	[decimal]$Income
 	[int]$Owned
 	[KeyDefinition]$Key
-	[UpgradeDefinition[]]$Upgrades
+	[UpgradeData]$Upgrades
 
 	[Label]$PriceLabel
 	[Label]$OwnedLabel

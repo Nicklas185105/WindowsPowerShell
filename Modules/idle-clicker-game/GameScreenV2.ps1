@@ -64,6 +64,8 @@ class GameScreen {
 		##########################################################
 		# Left Panel – Game Stats
 		##########################################################
+		Write-Host "Creating stats panel..."
+
 		$statsPanel = New-Object FrameView "Stats"
 		$statsPanel.X = 0
 		$statsPanel.Y = 0
@@ -162,23 +164,25 @@ class GameScreen {
 		##########################################################
 		# Buildings Panel
 		##########################################################
+		Write-Host "Creating buildings panel..."
+
 		$buildingsPanel = New-Object FrameView "Buildings"
 		$buildingsPanel.X = [Pos]::At($this.LeftWidth + 1); $buildingsPanel.Y = [Pos]::At(0)
 		$buildingsPanel.Width = $this.RightWidth; $buildingsPanel.Height = [Dim]::Fill()
 
 		# Get the building definitions.
-		$properties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
-		$totalCount = $properties.Count
+		$buildingProperties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
+		$totalBuildingCount = $buildingProperties.Count
 
 		# Create a scrollable view for the buildings.
 		$scrollView = New-Object ScrollView
 		$scrollView.AutoHideScrollBars = $true
 		$scrollView.ShowVerticalScrollIndicator = $true
-		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalCount * 4 - 1)
+		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalBuildingCount * 4 - 1)
 		$scrollView.Width = [Dim]::Fill(); $scrollView.Height = [Dim]::Fill()
 		$yPos = 0
-		for ($i = 0; $i -lt $totalCount; $i++) {
-			$bd = $properties[$i].Value
+		for ($i = 0; $i -lt $totalBuildingCount; $i++) {
+			$bd = $buildingProperties[$i].Value
 			$panel = New-Object FrameView; $panel.Height = 4; $panel.Width = [Dim]::Fill()
 			$panel.X = [Pos]::At(1); $panel.Y = [Pos]::At($yPos)
 			$yPos += 4
@@ -192,37 +196,42 @@ class GameScreen {
 		##########################################################
 		# Upgrades Panel
 		##########################################################
+		Write-Host "Creating upgrades panel..."
+
 		$upgradesPanel = New-Object FrameView "Upgrades"
 		$upgradesPanel.X = [Pos]::At($this.LeftWidth + $this.RightWidth + 2)
 		$upgradesPanel.Y = [Pos]::At(0)
-		$upgradesPanel.Width = $this.RightWidth
+		$upgradesPanel.Width = $this.RightWidth * 2
 		$upgradesPanel.Height = [Dim]::Fill()
 
 		# Create a scrollable view for the upgrades.
 		$scrollView = New-Object ScrollView
 		$scrollView.AutoHideScrollBars = $true
 		$scrollView.ShowVerticalScrollIndicator = $true
-		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalCount * 4 - 1)
+		$scrollView.ContentSize = [Size]::new($this.RightWidth * 2 - 3, ($totalBuildingCount * 15 * 4 - 1))
 		$scrollView.Width = [Dim]::Fill()
 		$scrollView.Height = [Dim]::Fill()
 		$yPos = 0
-		for ($i = 0; $i -lt $totalCount; $i++) {
-			$bd = $properties[$i].Value
-			foreach ($upgrade in $bd.Upgrades) {
+		for ($i = 0; $i -lt $totalBuildingCount; $i++) {
+			$bd = $buildingProperties[$i].Value
+			# Get the building definitions.
+			$upgradeProperties = $bd.Upgrades.PSObject.Properties | Where-Object { $_.Value -is [UpgradeDefinition] }
+			$totalUpgradeCount = $upgradeProperties.Count
+			for ($k = 0; $k -lt $totalUpgradeCount; $k++) {
+				$upgrade = $upgradeProperties[$k].Value
 				$upgrade.Panel = New-Object FrameView
 				$upgrade.Panel.Height = 4
 				$upgrade.Panel.Width = [Dim]::Fill()
 				$upgrade.Panel.X = [Pos]::At(1)
 				$upgrade.Panel.Y = [Pos]::At($yPos)
 				$yPos += 4
-				$label = New-Object Label ("{0,-25}{1,6}" -f $upgrade.Name, (FormatLargeNumber $upgrade.BaseCost))
+				$label = New-Object Label ("{0,-25}{1,6}" -f $upgrade.Name, $upgrade.RequiredCount)
 				$label.X = [Pos]::At(1)
 				$label.Y = [Pos]::At(0)
 				$upgrade.Panel.Add($label)
 				$upgrade.BuyButton = New-Object Button "Buy"
 				$upgrade.BuyButton.X = 1
 				$upgrade.BuyButton.Y = 1
-				# $upgrade.BuyButton.Add_Clicked({ $this.Buy($bd); [Terminal.Gui.Application]::MainLoop.Invoke({}); })
 				$upgrade.InfoButton = New-Object Button "?"
 				$upgrade.InfoButton.X = 8
 				$upgrade.InfoButton.Y = 1
