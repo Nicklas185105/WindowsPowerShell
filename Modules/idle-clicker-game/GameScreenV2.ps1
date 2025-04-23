@@ -37,10 +37,10 @@ class GameScreen {
 
 	[void] Update([object]$gameData, [object]$buildings) {
 		# Update the labels with the new gameData values
-		$pointsStr = (FormatLargeNumber $gameData.Clicks) + " p"
+		$pointsStr = $gameData.Clicks.FormatCompact() + " p"
 		$this.PointsLabel.Text = $this.CenterText($pointsStr, $this.LeftWidth)
 
-		$idleStr = (FormatLargeNumber $gameData.IdleIncome) + " p/s"
+		$idleStr = $gameData.IdleIncome.FormatCompact() + " p/s"
 		$this.IdleLabel.Text = $this.CenterText($idleStr, $this.LeftWidth)
 
 		if ($gameData.LastSaveTime) {
@@ -90,14 +90,14 @@ class GameScreen {
 		$statsPanel.Add($sepLabel)
 
 		# Points
-		$pointsStr = (FormatLargeNumber $gameData.Clicks) + " p"
+		$pointsStr = $gameData.Clicks.FormatCompact() + " p"
 		$this.PointsLabel = New-Object Label ($this.CenterText($pointsStr, $this.LeftWidth))
 		$this.PointsLabel.X = [Pos]::Center()
 		$this.PointsLabel.Y = [Pos]::At(5)
 		$statsPanel.Add($this.PointsLabel)
 
 		# Production rate
-		$idleStr = (FormatLargeNumber $gameData.IdleIncome) + " p/s"
+		$idleStr = $gameData.IdleIncome.FormatCompact() + " p/s"
 		$this.IdleLabel = New-Object Label ($this.CenterText($idleStr, $this.LeftWidth))
 		$this.IdleLabel.X = [Pos]::Center()
 		$this.IdleLabel.Y = [Pos]::At(7)
@@ -164,105 +164,100 @@ class GameScreen {
 		##########################################################
 		# Buildings Panel
 		##########################################################
-		Write-Host "Creating buildings panel..."
+		# Write-Host "Creating buildings panel..."
 
-		$buildingsPanel = New-Object FrameView "Buildings"
-		$buildingsPanel.X = [Pos]::At($this.LeftWidth + 1); $buildingsPanel.Y = [Pos]::At(0)
-		$buildingsPanel.Width = $this.RightWidth; $buildingsPanel.Height = [Dim]::Fill()
+		# $buildingsPanel = New-Object FrameView "Buildings"
+		# $buildingsPanel.X = [Pos]::At($this.LeftWidth + 1); $buildingsPanel.Y = [Pos]::At(0)
+		# $buildingsPanel.Width = $this.RightWidth; $buildingsPanel.Height = [Dim]::Fill()
 
-		# Get the building definitions.
-		$buildingProperties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
-		$totalBuildingCount = $buildingProperties.Count
+		# # Get the building definitions.
+		# $buildingProperties = $buildings.PSObject.Properties | Where-Object { $_.Value -is [BuildingDefinition] }
+		# $totalBuildingCount = $buildingProperties.Count
 
-		# Create a scrollable view for the buildings.
-		$scrollView = New-Object ScrollView
-		$scrollView.AutoHideScrollBars = $true
-		$scrollView.ShowVerticalScrollIndicator = $true
-		$scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalBuildingCount * 4 - 1)
-		$scrollView.Width = [Dim]::Fill(); $scrollView.Height = [Dim]::Fill()
-		$yPos = 0
-		for ($i = 0; $i -lt $totalBuildingCount; $i++) {
-			$bd = $buildingProperties[$i].Value
-			$panel = New-Object FrameView; $panel.Height = 4; $panel.Width = [Dim]::Fill()
-			$panel.X = [Pos]::At(1); $panel.Y = [Pos]::At($yPos)
-			$yPos += 4
-			$shopInfo = (FormatShopItem $bd.Name $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
-			$building = $bd.Setup($shopInfo)
-			$panel.Add($building.OwnedLabel, $building.BuyButton, $building.InfoButton, $building.PriceLabel)
-			$scrollView.Add($panel)
-		}
-		$buildingsPanel.Add($scrollView)
+		# # Create a scrollable view for the buildings.
+		# $scrollView = New-Object ScrollView
+		# $scrollView.AutoHideScrollBars = $true
+		# $scrollView.ShowVerticalScrollIndicator = $true
+		# $scrollView.ContentSize = [Size]::new($this.RightWidth - 3, $totalBuildingCount * 4 - 1)
+		# $scrollView.Width = [Dim]::Fill(); $scrollView.Height = [Dim]::Fill()
+		# $yPos = 0
+		# for ($i = 0; $i -lt $totalBuildingCount; $i++) {
+		# 	$bd = $buildingProperties[$i].Value
+		# 	$panel = New-Object FrameView; $panel.Height = 4; $panel.Width = [Dim]::Fill()
+		# 	$panel.X = [Pos]::At(1); $panel.Y = [Pos]::At($yPos)
+		# 	$yPos += 4
+		# 	$shopInfo = (FormatShopItem $bd.Name $bd.Owned (FormatLargeNumber $bd.GetCurrentPrice()))
+		# 	$building = $bd.Setup($shopInfo)
+		# 	$panel.Add($building.OwnedLabel, $building.BuyButton, $building.InfoButton, $building.PriceLabel)
+		# 	$scrollView.Add($panel)
+		# }
+		# $buildingsPanel.Add($scrollView)
 
 		##########################################################
 		# Upgrades Panel
 		##########################################################
-		Write-Host "Creating upgrades panel..."
+		# Write-Host "Creating upgrades panel..."
 
-		$upgradesPanel = New-Object FrameView "Upgrades"
-		$upgradesPanel.X = [Pos]::At($this.LeftWidth + $this.RightWidth + 2)
-		$upgradesPanel.Y = [Pos]::At(0)
-		$upgradesPanel.Width = $this.RightWidth * 2
-		$upgradesPanel.Height = [Dim]::Fill()
+		# $upgradesPanel = New-Object FrameView "Upgrades"
+		# $upgradesPanel.X = [Pos]::At($this.LeftWidth + $this.RightWidth + 2)
+		# $upgradesPanel.Y = [Pos]::At(0)
+		# $upgradesPanel.Width = $this.RightWidth * 2
+		# $upgradesPanel.Height = [Dim]::Fill()
 
-		# Create a scrollable view for the upgrades.
-		$scrollView = New-Object ScrollView
-		$scrollView.AutoHideScrollBars = $true
-		$scrollView.ShowVerticalScrollIndicator = $true
-		$scrollView.ContentSize = [Size]::new($this.RightWidth * 2 - 3, ($totalBuildingCount * 15 * 4 - 1))
-		$scrollView.Width = [Dim]::Fill()
-		$scrollView.Height = [Dim]::Fill()
-		$yPos = 0
-		for ($i = 0; $i -lt $totalBuildingCount; $i++) {
-			$bd = $buildingProperties[$i].Value
-			# Get the building definitions.
-			$upgradeProperties = $bd.Upgrades.PSObject.Properties | Where-Object { $_.Value -is [UpgradeDefinition] }
-			$totalUpgradeCount = $upgradeProperties.Count
-			for ($k = 0; $k -lt $totalUpgradeCount; $k++) {
-				$upgrade = $upgradeProperties[$k].Value
-				$upgrade.Panel = New-Object FrameView
-				$upgrade.Panel.Height = 4
-				$upgrade.Panel.Width = [Dim]::Fill()
-				$upgrade.Panel.X = [Pos]::At(1)
-				$upgrade.Panel.Y = [Pos]::At($yPos)
-				$yPos += 4
-				$label = New-Object Label ("{0,-25}{1,6}" -f $upgrade.Name, $upgrade.RequiredCount)
-				$label.X = [Pos]::At(1)
-				$label.Y = [Pos]::At(0)
-				$upgrade.Panel.Add($label)
-				$upgrade.BuyButton = New-Object Button "Buy"
-				$upgrade.BuyButton.X = 1
-				$upgrade.BuyButton.Y = 1
-				$upgrade.InfoButton = New-Object Button "?"
-				$upgrade.InfoButton.X = 8
-				$upgrade.InfoButton.Y = 1
-				$upgrade.Panel.Add($upgrade.BuyButton)
-				$upgrade.Panel.Add($upgrade.InfoButton)
-				$scrollView.Add($upgrade.Panel)
+		# # Create a scrollable view for the upgrades.
+		# $scrollView = New-Object ScrollView
+		# $scrollView.AutoHideScrollBars = $true
+		# $scrollView.ShowVerticalScrollIndicator = $true
+		# $scrollView.ContentSize = [Size]::new($this.RightWidth * 2 - 3, ($totalBuildingCount * 15 * 4 - 1))
+		# $scrollView.Width = [Dim]::Fill()
+		# $scrollView.Height = [Dim]::Fill()
+		# $yPos = 0
+		# for ($i = 0; $i -lt $totalBuildingCount; $i++) {
+		# 	$bd = $buildingProperties[$i].Value
+		# 	# Get the building definitions.
+		# 	$upgradeProperties = $bd.Upgrades.PSObject.Properties | Where-Object { $_.Value -is [UpgradeDefinition] }
+		# 	$totalUpgradeCount = $upgradeProperties.Count
+		# 	for ($k = 0; $k -lt $totalUpgradeCount; $k++) {
+		# 		$upgrade = $upgradeProperties[$k].Value
+		# 		$upgrade.Panel = New-Object FrameView
+		# 		$upgrade.Panel.Height = 4
+		# 		$upgrade.Panel.Width = [Dim]::Fill()
+		# 		$upgrade.Panel.X = [Pos]::At(1)
+		# 		$upgrade.Panel.Y = [Pos]::At($yPos)
+		# 		$yPos += 4
+		# 		$label = New-Object Label ("{0,-25}{1,6}" -f $upgrade.Name, $upgrade.RequiredCount)
+		# 		$label.X = [Pos]::At(1)
+		# 		$label.Y = [Pos]::At(0)
+		# 		$upgrade.Panel.Add($label)
+		# 		$upgrade.BuyButton = New-Object Button "Buy"
+		# 		$upgrade.BuyButton.X = 1
+		# 		$upgrade.BuyButton.Y = 1
+		# 		$upgrade.InfoButton = New-Object Button "?"
+		# 		$upgrade.InfoButton.X = 8
+		# 		$upgrade.InfoButton.Y = 1
+		# 		$upgrade.Panel.Add($upgrade.BuyButton)
+		# 		$upgrade.Panel.Add($upgrade.InfoButton)
+		# 		$scrollView.Add($upgrade.Panel)
 
 
-				# if (-not $upgrade.IsPurchased -and $upgrade.UnlockCondition.Invoke($bd)) {
-				# 	# Display the upgrade as available, or allow purchase.
-				# 	Write-Host "Upgrade available: $($upgrade.Name) for $($upgrade.BaseCost) clicks."
+		# 		# if (-not $upgrade.IsPurchased -and $upgrade.UnlockCondition.Invoke($bd)) {
+		# 		# 	# Display the upgrade as available, or allow purchase.
+		# 		# 	Write-Host "Upgrade available: $($upgrade.Name) for $($upgrade.BaseCost) clicks."
 
-				# 	# When purchasing (after verifying the player has enough clicks):
-				# 	# e.g. if ($global:Data.Clicks -ge $upgrade.BaseCost) {
-				# 	#          $global:Data.Clicks -= $upgrade.BaseCost
-				# 	#          $upgrade.Effect.Invoke($global:BuildingData.Cursor)
-				# 	#          $upgrade.IsPurchased = $true
-				# 	#      }
-				# }
-			}
-		}
-		$upgradesPanel.Add($scrollView)
-
-		# Add all panels to the main window.
-		$this.MainWindow.Add($statsPanel)
-		$this.MainWindow.Add($buildingsPanel)
-		$this.MainWindow.Add($upgradesPanel)
+		# 		# 	# When purchasing (after verifying the player has enough clicks):
+		# 		# 	# e.g. if ($global:Data.Clicks -ge $upgrade.BaseCost) {
+		# 		# 	#          $global:Data.Clicks -= $upgrade.BaseCost
+		# 		# 	#          $upgrade.Effect.Invoke($global:BuildingData.Cursor)
+		# 		# 	#          $upgrade.IsPurchased = $true
+		# 		# 	#      }
+		# 		# }
+		# 	}
+		# }
+		# $upgradesPanel.Add($scrollView)
 
 		# Add all panels to the main window.
 		$this.MainWindow.Add($statsPanel)
-		$this.MainWindow.Add($buildingsPanel)
-		$this.MainWindow.Add($upgradesPanel)
+		# $this.MainWindow.Add($buildingsPanel)
+		# $this.MainWindow.Add($upgradesPanel)
 	}
 }

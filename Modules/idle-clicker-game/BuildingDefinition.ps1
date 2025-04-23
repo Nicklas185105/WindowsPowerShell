@@ -1,90 +1,101 @@
 using namespace Terminal.Gui
 
 class BuildingDefinition {
-	[string]$Name
-	[decimal]$BaseCost
-	[decimal]$Income
-	[int]$Owned
-	[KeyDefinition]$Key
-	[UpgradeData]$Upgrades
+	[string]      $Name
+    [Number]      $BaseCost
+    [Number]      $Income
+    [int]         $Owned
+    [KeyDefinition] $Key
+    [UpgradeData] $Upgrades
 
-	[Label]$PriceLabel
-	[Label]$OwnedLabel
-	[Button]$BuyButton
-	[Button]$InfoButton
+    [Label]       $PriceLabel
+    [Label]       $OwnedLabel
+    [Button]      $BuyButton
+    [Button]      $InfoButton
 
-	BuildingDefinition([string]$name, [decimal]$baseCost, [decimal]$income, [KeyDefinition]$key, [int]$owned) {
-		$this.Name = $name
-		$this.BaseCost = $baseCost
-		$this.Income = $income
-		$this.Key = $key
-		$this.Owned = $owned
+    BuildingDefinition([string]$name, [Number]$baseCost, [Number]$income, [KeyDefinition]$key, [int]$owned) {
+        $this.Name     = $name
+        $this.BaseCost = $baseCost
+        $this.Income   = $income
+        $this.Key      = $key
+        $this.Owned    = $owned
+    }
+
+    BuildingDefinition([string]$name, [Number]$baseCost, [Number]$income, [KeyDefinition]$key){
+		$this.Name     = $name
+        $this.BaseCost = $baseCost
+        $this.Income   = $income
+        $this.Key      = $key
+        $this.Owned    = 0
 	}
 
-	BuildingDefinition([string]$name, [decimal]$baseCost, [decimal]$income, [KeyDefinition]$key) {
-		$this.Name = $name
-		$this.BaseCost = $baseCost
-		$this.Income = $income
-		$this.Key = $key
-		$this.Owned = 0
-	}
 
-	[decimal] GetCurrentPrice() {
-		return $this.GetCurrentPrice(0)
-	}
+    # Returns a Number, already rounded UP to the next whole unit
+    [Number] GetCurrentPrice() {
+        # Price = BaseCost * (1.15 ^ (Owned - free)), then ceiling
+        $exponent = [Number]::new( ($this.Owned - 0).ToString() )
+        $factor   = [Number]::new('1.15').Pow($exponent)
+        $price    = $this.BaseCost * $factor
+        return $price.Ceiling()
+    }
 
-	[decimal] GetCurrentPrice([int]$free) {
-		# Formula: Price = BaseCost × 1.15^(M - free), rounded up.
-		$price = $this.BaseCost * [math]::Pow(1.15, ($this.Owned - $free))
-		return [math]::Ceiling($price)
-	}
+    # Owned × Income
+    [Number] GetCurrentIncome() {
+        $multiplier = [Number]::new( $this.Owned.ToString() )
+        return $this.Income * $multiplier
+    }
 
-	[decimal] GetCurrentIncome() {
-		return $this.Owned * $this.Income;
-	}
+    [void] BuyBuilding() {
+        $price = $this.GetCurrentPrice()
+        # Assume $global:Data.Clicks is also a Number
+        if ($global:Data.Clicks -ge $price) {
+            $global:Data.Clicks -= $price
+            $this.Owned++
+            $global:Data.UpdateIdleIncomeValue()
 
-	[void] BuyBuilding() {
-		$price = $this.GetCurrentPrice()
-		if ($global:Data.Clicks -ge $price) {
-			$global:Data.Clicks -= $price
-			$this.Owned += 1
-			$global:Data.UpdateIdleIncomeValue()
-			$shopInfo = (FormatShopItem $this.Name $this.Owned (FormatLargeNumber $this.GetCurrentPrice()))
-			$this.OwnedLabel.Text = ($shopInfo[0])
-			$this.PriceLabel.Text = ($shopInfo[1])
-		}
-	}
+            $shopInfo = FormatShopItem `
+                $this.Name `
+                $this.Owned `
+                $price.FormatCompact()
 
-	[string] GetPrintName() {
-		return "$($this.Name)"
-	}
+            $this.OwnedLabel.Text = $shopInfo[0]
+            $this.PriceLabel.Text = $shopInfo[1]
+        }
+    }
 
-	[BuildingDefinition] Setup([string[]]$shopInfo) {
-		$this.OwnedLabel = New-Object Label ($shopInfo[0])
-		$this.OwnedLabel.X = 1; $this.OwnedLabel.Y = 0
-		$this.PriceLabel = New-Object Label ($shopInfo[1])
-		$this.PriceLabel.X = 15; $this.PriceLabel.Y = 1
-		$this.BuyButton = New-Object Button "Buy"
-		$this.BuyButton.X = 1
-		$this.BuyButton.Y = 1
-		$this.InfoButton = New-Object Button "?"
-		$this.InfoButton.X = 8
-		$this.InfoButton.Y = 1
-		return $this
-	}
+    [string] GetPrintName() {
+        return "$($this.Name)"
+    }
 
-	[string] GetInfo() {
-		$info = @()
-		$info += "Name: {0,-26}" -f $this.Name
-		$info += "Base Income: {0,-19}" -f (FormatLargeNumber $this.Income)
-		$info += "Total Income: {0,-18}" -f (FormatLargeNumber $this.GetCurrentIncome())
-		if ($global:Data.IdleIncome -gt 0) {
-			$percentage = [math]::Round(($this.GetCurrentIncome() / $global:Data.IdleIncome) * 100, 2)
-			$info += "Percentage of Total Income: $($percentage)%"
-		}
+    [BuildingDefinition] Setup([string[]]$shopInfo) {
+        $this.OwnedLabel = [Label]::new($shopInfo[0])
+        $this.OwnedLabel.X = 1; $this.OwnedLabel.Y = 0
+        $this.PriceLabel = [Label]::new($shopInfo[1])
+        $this.PriceLabel.X = 15; $this.PriceLabel.Y = 1
 
-		return $info
-	}
+        $this.BuyButton = [Button]::new("Buy")
+        $this.BuyButton.X = 1; $this.BuyButton.Y = 1
+
+        $this.InfoButton = [Button]::new("?")
+        $this.InfoButton.X = 8; $this.InfoButton.Y = 1
+
+        return $this
+    }
+
+    [string[]] GetInfo() {
+        $info = @()
+        $info += "Name: {0,-26}" -f $this.Name
+        $info += "Base Income: {0,-19}" -f $this.Income.FormatCompact()
+        $info += "Total Income: {0,-18}" -f $this.GetCurrentIncome().FormatCompact()
+
+        if ($global:Data.IdleIncome -gt [Number]::new('0')) {
+            $percentNum = $this.GetCurrentIncome() / $global:Data.IdleIncome * [Number]::new('100')
+            $percentage = [math]::Round( $percentNum.GetValue(), 2 )
+            $info += "Percentage of Total Income: $percentage`%"
+        }
+
+        return $info
+    }
 }
 
 # All buildings

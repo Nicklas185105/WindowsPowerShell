@@ -34,7 +34,7 @@ class GameScreen {
         }
     }
 
-    [string] FormatLargeNumber([decimal]$number) {
+    [string] FormatLargeNumber([bigint]$number) {
         if ($number -lt 1e3) {
             # No scaling needed. Here, we choose 1 decimal for numbers less than 10, else none.
             $decimals = $this.GetDecimal($number)

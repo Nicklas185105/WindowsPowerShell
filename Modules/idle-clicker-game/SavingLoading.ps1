@@ -28,8 +28,8 @@ function Load-IdleClickerGame {
 
     # Read the file and convert the JSON back to an object (ensure proper encoding)
     $loadedState = Get-Content -Path $FilePath -Raw -Encoding UTF8 | ConvertFrom-Json
-    $global:Data.Clicks     = $loadedState.Data.Clicks
-    $global:Data.ClickValue = $loadedState.Data.ClickValue
+    $global:Data.Clicks     = [Number]::new($loadedState.Data.Clicks.ToString())
+    $global:Data.ClickValue = [Number]::new($loadedState.Data.ClickValue.ToString())
     if ($loadedState.Data.LastSaveTime) {
         $global:Data.LastSaveTime = $loadedState.Data.LastSaveTime.ToString()
     }
