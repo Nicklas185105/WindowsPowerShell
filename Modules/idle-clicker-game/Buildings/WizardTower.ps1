@@ -1,4 +1,6 @@
-$global:BuildingData.WizardTower = [BuildingDefinition]::new("Wizard Tower", 330000000, 44000, $global:Keys.D8)
+using namespace IdleClicker
+
+$global:BuildingData.WizardTower = [BuildingDefinition]::new("Wizard Tower", [Number]::new("330000000.0"), [Number]::new("44000.0"), $global:Keys.D8)
 $global:BuildingData.WizardTower.Upgrades = [UpgradeData]::new()
 
 # — Wizard Tower efficiency upgrades (×2) —

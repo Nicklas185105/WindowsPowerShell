@@ -1,4 +1,6 @@
-$global:BuildingData.Shipment = [BuildingDefinition]::new("Shipment", 5100000000, 260000, $global:Keys.D9)
+using namespace IdleClicker
+
+$global:BuildingData.Shipment = [BuildingDefinition]::new("Shipment", [Number]::new("5100000000.0"), [Number]::new("260000.0"), $global:Keys.D9)
 $global:BuildingData.Shipment.Upgrades = [UpgradeData]::new()
 
 # — Shipment efficiency upgrades (×2) —

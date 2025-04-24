@@ -1,4 +1,6 @@
-$global:BuildingData.FractalEngine = [BuildingDefinition]::new("Fractal Engine", 310000000000000000, 150000000000, $global:Keys.N6)
+using namespace IdleClicker
+
+$global:BuildingData.FractalEngine = [BuildingDefinition]::new("Fractal Engine", [Number]::new("310000000000000000.0"), [Number]::new("150000000000.0"), $global:Keys.N6)
 $global:BuildingData.FractalEngine.Upgrades = [UpgradeData]::new()
 
 # — Fractal Engine efficiency upgrades (×2) —

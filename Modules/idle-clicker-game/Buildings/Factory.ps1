@@ -1,4 +1,6 @@
-$global:BuildingData.Factory = [BuildingDefinition]::new("Factory", 130000, 260, $global:Keys.D5)
+using namespace IdleClicker
+
+$global:BuildingData.Factory = [BuildingDefinition]::new("Factory", [Number]::new("130000.0"), [Number]::new("260.0"), $global:Keys.D5)
 $global:BuildingData.Factory.Upgrades = [UpgradeData]::new()
 
 # — Factory efficiency upgrades (×2) —

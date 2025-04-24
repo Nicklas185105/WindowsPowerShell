@@ -1,4 +1,6 @@
-$global:BuildingData.JavascriptConsole = [BuildingDefinition]::new("Javascript Console", 71000000000000000000, 1100000000000, $global:Keys.N7)
+using namespace IdleClicker
+
+$global:BuildingData.JavascriptConsole = [BuildingDefinition]::new("Javascript Console", [Number]::new("71000000000000000000.0"), [Number]::new("1100000000000.0"), $global:Keys.N7)
 $global:BuildingData.JavascriptConsole.Upgrades = [UpgradeData]::new()
 
 # — JavaScript Console efficiency upgrades (×2) —

@@ -1,4 +1,6 @@
-$global:BuildingData.Farm = [BuildingDefinition]::new("Farm", 1100, 8, $global:Keys.D3)
+using namespace IdleClicker
+
+$global:BuildingData.Farm = [BuildingDefinition]::new("Farm", [Number]::new("1100.0"), [Number]::new("8.0"), $global:Keys.D3)
 $global:BuildingData.Farm.Upgrades = [UpgradeData]::new()
 
 # — Farm efficiency upgrades (×2) —

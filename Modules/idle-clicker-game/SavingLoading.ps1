@@ -1,3 +1,5 @@
+using namespace IdleClicker
+
 # Save the current game state to a JSON file.
 function Save-IdleClickerGame {
     param(
@@ -7,7 +9,7 @@ function Save-IdleClickerGame {
     $global:Data.LastSaveTime = (Get-Date).ToString("HH:mm:ss")
     # Convert the state to JSON and write to the file
     $data = @{
-        Data = $global:Data
+        Data = $global:Data.GetSaveableData()
         Owned = $global:BuildingData.GetOwnedBuildings()
     }
     $data | ConvertTo-Json | Out-File -FilePath $FilePath -Encoding UTF8
@@ -28,8 +30,7 @@ function Load-IdleClickerGame {
 
     # Read the file and convert the JSON back to an object (ensure proper encoding)
     $loadedState = Get-Content -Path $FilePath -Raw -Encoding UTF8 | ConvertFrom-Json
-    $global:Data.Clicks     = [Number]::new($loadedState.Data.Clicks.ToString())
-    $global:Data.ClickValue = [Number]::new($loadedState.Data.ClickValue.ToString())
+    $global:Data.SetSaveableData($loadedState.Data)
     if ($loadedState.Data.LastSaveTime) {
         $global:Data.LastSaveTime = $loadedState.Data.LastSaveTime.ToString()
     }

@@ -1,4 +1,6 @@
-$global:BuildingData.Mine = [BuildingDefinition]::new("Mine", 12000, 47, $global:Keys.D4)
+using namespace IdleClicker
+
+$global:BuildingData.Mine = [BuildingDefinition]::new("Mine", [Number]::new("12000.0"), [Number]::new("47.0"), $global:Keys.D4)
 $global:BuildingData.Mine.Upgrades = [UpgradeData]::new()
 
 # — Mine efficiency upgrades (×2) —

@@ -1,4 +1,6 @@
-$global:BuildingData.AlchemyLab = [BuildingDefinition]::new("Alchemy Lab", 75000000000, 1600000, $global:Keys.D0)
+using namespace IdleClicker
+
+$global:BuildingData.AlchemyLab = [BuildingDefinition]::new("Alchemy Lab", [Number]::new("75000000000.0"), [Number]::new("1600000.0"), $global:Keys.D0)
 $global:BuildingData.AlchemyLab.Upgrades = [UpgradeData]::new()
 
 # — Alchemy Lab efficiency upgrades (×2) —

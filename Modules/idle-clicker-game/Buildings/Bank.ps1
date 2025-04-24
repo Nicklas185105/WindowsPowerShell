@@ -1,4 +1,6 @@
-$global:BuildingData.Bank = [BuildingDefinition]::new("Bank", 1400000, 1400, $global:Keys.D6)
+using namespace IdleClicker
+
+$global:BuildingData.Bank = [BuildingDefinition]::new("Bank", [Number]::new("1400000.0"), [Number]::new("1400.0"), $global:Keys.D6)
 $global:BuildingData.Bank.Upgrades = [UpgradeData]::new()
 
 # — Bank efficiency upgrades (×2) —

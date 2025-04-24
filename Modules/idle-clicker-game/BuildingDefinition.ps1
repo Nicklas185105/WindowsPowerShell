@@ -1,4 +1,5 @@
 using namespace Terminal.Gui
+using namespace IdleClicker
 
 class BuildingDefinition {
 	[string]      $Name
@@ -82,7 +83,7 @@ class BuildingDefinition {
         return $this
     }
 
-    [string[]] GetInfo() {
+    [NStack.UString] GetInfo() {
         $info = @()
         $info += "Name: {0,-26}" -f $this.Name
         $info += "Base Income: {0,-19}" -f $this.Income.FormatCompact()
@@ -90,11 +91,12 @@ class BuildingDefinition {
 
         if ($global:Data.IdleIncome -gt [Number]::new('0')) {
             $percentNum = $this.GetCurrentIncome() / $global:Data.IdleIncome * [Number]::new('100')
-            $percentage = [math]::Round( $percentNum.GetValue(), 2 )
+            $percentage = [math]::Round( $percentNum.ToDecimal(), 2 )
             $info += "Percentage of Total Income: $percentage`%"
         }
 
-        return $info
+		$text = [NStack.UString]::Make(($info -join "`n"))
+        return $text
     }
 }
 

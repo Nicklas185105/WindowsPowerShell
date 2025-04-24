@@ -1,4 +1,6 @@
-$global:BuildingData.Chancemaker = [BuildingDefinition]::new("Chancemaker", 26000000000000000, 21000000000, $global:Keys.N5)
+using namespace IdleClicker
+
+$global:BuildingData.Chancemaker = [BuildingDefinition]::new("Chancemaker", [Number]::new("26000000000000000.0"), [Number]::new("21000000000.0"), $global:Keys.N5)
 $global:BuildingData.Chancemaker.Upgrades = [UpgradeData]::new()
 
 # — Chancemaker efficiency upgrades (×2) —

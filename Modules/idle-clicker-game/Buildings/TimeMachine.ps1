@@ -1,4 +1,6 @@
-$global:BuildingData.TimeMachine = [BuildingDefinition]::new("Time Machine", 14000000000000, 65000000, $global:Keys.N2)
+using namespace IdleClicker
+
+$global:BuildingData.TimeMachine = [BuildingDefinition]::new("Time Machine", [Number]::new("14000000000000.0"), [Number]::new("65000000.0"), $global:Keys.N2)
 $global:BuildingData.TimeMachine.Upgrades = [UpgradeData]::new()
 
 # — Time Machine efficiency upgrades (×2) —

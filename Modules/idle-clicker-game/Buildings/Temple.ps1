@@ -1,4 +1,6 @@
-$global:BuildingData.Temple = [BuildingDefinition]::new("Temple", 20000000, 7800, $global:Keys.D7)
+using namespace IdleClicker
+
+$global:BuildingData.Temple = [BuildingDefinition]::new("Temple", [Number]::new("20000000.0"), [Number]::new("7800.0"), $global:Keys.D7)
 $global:BuildingData.Temple.Upgrades = [UpgradeData]::new()
 
 # — Temple efficiency upgrades (×2) —

@@ -1,4 +1,6 @@
-$global:BuildingData.Prism = [BuildingDefinition]::new("Prism", 2100000000000000, 2900000000, $global:Keys.N4)
+using namespace IdleClicker
+
+$global:BuildingData.Prism = [BuildingDefinition]::new("Prism", [Number]::new("2100000000000000.0"), [Number]::new("2900000000.0"), $global:Keys.N4)
 $global:BuildingData.Prism.Upgrades = [UpgradeData]::new()
 
 # — Prism efficiency upgrades (×2) —

@@ -1,135 +1,215 @@
-class Number {
-    [bigint] $Numerator
-    [bigint] $Denominator
+# Make sure we can see BigInteger
+$ref = [System.IO.Path]::Combine([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory(), "System.Numerics.dll")
 
-    Number([string] $text) {
-        if ($text -match '^(?<int>\d+)([\.,](?<frac>\d+))?$') {
-            $intPart  = $matches.int
-            $fracPart = $matches.frac
-            $scale     = if ($fracPart) { $fracPart.Length } else { 0 }
-            $this.Numerator   = [bigint]("$intPart$fracPart")
-            # Use math Pow for exponentiation
-            $this.Denominator = [bigint][math]::Pow(10, $scale)
-        } else {
-            throw "Invalid number format: $text"
+# Define the Number class with IComparable
+$cs = @"
+using System;
+using System.Numerics;
+
+namespace IdleClicker {
+    public class Number : IComparable, IComparable<Number>
+    {
+        private BigInteger _numerator;
+        private BigInteger _denominator;
+
+        public BigInteger Numerator
+        {
+            get { return _numerator; }
         }
-    }
-
-    static [Number] FromFraction([bigint] $num, [bigint] $den) {
-        $inst = [Number]::new('0')
-        $inst.Numerator   = $num
-        $inst.Denominator = $den
-        return $inst
-    }
-
-    [string] ToString() {
-        $whole = [bigint]::Divide($this.Numerator, $this.Denominator)
-        $rem   = [bigint]::Remainder($this.Numerator, $this.Denominator)
-        if ($rem -eq 0) { return "$whole" }
-        $width = if ($this.Denominator -gt 0) { [int][math]::Log10($this.Denominator) } else { 0 }
-        $frac  = $rem.ToString().PadLeft($width, '0')
-        return "$whole.$frac"
-    }
-
-    [Number] Ceiling() {
-        $whole = [bigint]::Divide($this.Numerator, $this.Denominator)
-        $rem   = [bigint]::Remainder($this.Numerator, $this.Denominator)
-        if ($rem -gt 0) { $whole++ }
-        return [Number]::new("$whole")
-    }
-
-    [Number] Pow([Number] $exp) {
-        if ($exp.Denominator -ne 1) {
-            throw "Exponent must be an integer"
+        public BigInteger Denominator
+        {
+            get { return _denominator; }
         }
-        $e       = [int]$exp.Numerator
-        $newNum  = [bigint]::Pow($this.Numerator, $e)
-        $newDen  = [bigint]::Pow($this.Denominator, $e)
-        return [Number]::FromFraction($newNum, $newDen)
-    }
 
-    static [Number] op_Addition([Number] $a, [Number] $b) {
-        $den = $a.Denominator * $b.Denominator
-        $num = $a.Numerator   * $b.Denominator +
-               $b.Numerator   * $a.Denominator
-        return [Number]::FromFraction($num, $den)
-    }
+        // Public constructor from string, supports '.' or ','.
+        public Number(string text)
+        {
+            if (String.IsNullOrEmpty(text))
+                throw new ArgumentException("Input cannot be empty", "text");
+            string[] parts = text.Split(new char[]{'.',','});
+            string intPart  = parts[0];
+            string fracPart = parts.Length > 1 ? parts[1] : String.Empty;
+            _numerator   = BigInteger.Parse(intPart + fracPart);
+            _denominator = BigInteger.Pow(10, fracPart.Length);
+        }
 
-    static [Number] op_Subtraction([Number] $a, [Number] $b) {
-        $den = $a.Denominator * $b.Denominator
-        $num = $a.Numerator   * $b.Denominator -
-               $b.Numerator   * $a.Denominator
-        return [Number]::FromFraction($num, $den)
-    }
+        // Internal constructor for fractions
+        private Number(BigInteger num, BigInteger den)
+        {
+            _numerator   = num;
+            _denominator = den;
+        }
 
-    static [Number] op_Multiply([Number] $a, [Number] $b) {
-        return [Number]::FromFraction(
-            $a.Numerator * $b.Numerator,
-            $a.Denominator * $b.Denominator
-        )
-    }
+        // IComparable<Number>
+        public int CompareTo(Number other)
+        {
+            if (other == null) return 1;
+            BigInteger left  = BigInteger.Multiply(_numerator, other._denominator);
+            BigInteger right = BigInteger.Multiply(other._numerator, _denominator);
+            return left.CompareTo(right);
+        }
 
-    static [Number] op_Division([Number] $a, [Number] $b) {
-        return [Number]::FromFraction(
-            $a.Numerator * $b.Denominator,
-            $a.Denominator * $b.Numerator
-        )
-    }
+        // Non-generic IComparable
+        int IComparable.CompareTo(object obj)
+        {
+            return CompareTo(obj as Number);
+        }
 
-    static [bool] op_Equality([Number] $a, [Number] $b) {
-        return ($a.Numerator * $b.Denominator) -eq ($b.Numerator * $a.Denominator)
-    }
+        public override string ToString()
+        {
+            BigInteger whole = BigInteger.Divide(_numerator, _denominator);
+            BigInteger rem   = BigInteger.Remainder(_numerator, _denominator);
+            if (rem.IsZero) return whole.ToString();
+            // width = number of decimal places = (length of _denominator as string) - 1
+            int width = _denominator.ToString().Length - 1;
+            string frac = rem.ToString().PadLeft(width, '0');
+            return String.Format("{0}.{1}", whole, frac);
+        }
 
-    static [bool] op_Inequality([Number] $a, [Number] $b) {
-        return -not [Number]::op_Equality($a, $b)
-    }
+        // Factory for operator results
+        public static Number FromFraction(BigInteger num, BigInteger den)
+        {
+            return new Number(num, den);
+        }
 
-    static [bool] op_LessThan([Number] $a, [Number] $b) {
-        return ($a.Numerator * $b.Denominator) -lt ($b.Numerator * $a.Denominator)
-    }
+        /// <summary>
+        /// Converts this Number to a System.Decimal safely by splitting into whole and remainder.
+        /// </summary>
+        public decimal ToDecimal()
+        {
+            // Split into integer and fractional parts
+            BigInteger wholeBI = BigInteger.Divide(Numerator, Denominator);
+            BigInteger remBI   = BigInteger.Remainder(Numerator, Denominator);
+            // Cast parts to decimal (should fit within range)
+            decimal wholeDec = (decimal)wholeBI;
+            decimal remDec   = (decimal)remBI;
+            decimal denDec   = (decimal)Denominator;
+            return wholeDec + remDec / denDec;
+        }
 
-    static [bool] op_LessThanOrEqual([Number] $a, [Number] $b) {
-        return [Number]::op_LessThan($a, $b) -or [Number]::op_Equality($a, $b)
-    }
+        public Number Ceiling()
+        {
+            BigInteger whole = BigInteger.Divide(_numerator, _denominator);
+            BigInteger rem   = BigInteger.Remainder(_numerator, _denominator);
+            if (!rem.IsZero) whole = BigInteger.Add(whole, BigInteger.One);
+            return new Number(whole.ToString());
+        }
 
-    static [bool] op_GreaterThan([Number] $a, [Number] $b) {
-        return ($a.Numerator * $b.Denominator) -gt ($b.Numerator * $a.Denominator)
-    }
+        public Number Pow(Number exp)
+        {
+            if (exp._denominator != BigInteger.One)
+                throw new ArgumentException("Exponent must be an integer", "exp");
+            int e = (int)exp._numerator;
+            BigInteger n = BigInteger.Pow(_numerator, e);
+            BigInteger d = BigInteger.Pow(_denominator, e);
+            return new Number(n, d);
+        }
 
-    static [bool] op_GreaterThanOrEqual([Number] $a, [Number] $b) {
-        return [Number]::op_GreaterThan($a, $b) -or [Number]::op_Equality($a, $b)
-    }
+        public static Number operator +(Number a, Number b)
+        {
+            BigInteger den = BigInteger.Multiply(a._denominator, b._denominator);
+            BigInteger num = BigInteger.Add(
+                BigInteger.Multiply(a._numerator, b._denominator),
+                BigInteger.Multiply(b._numerator, a._denominator));
+            return new Number(num, den);
+        }
 
-    [int] GetDecimal([decimal] $number) {
-        if ($number -lt 10) { return 1 } else { return 0 }
-    }
+        public static Number operator -(Number a, Number b)
+        {
+            BigInteger den = BigInteger.Multiply(a._denominator, b._denominator);
+            BigInteger num = BigInteger.Subtract(
+                BigInteger.Multiply(a._numerator, b._denominator),
+                BigInteger.Multiply(b._numerator, a._denominator));
+            return new Number(num, den);
+        }
 
-    hidden [string] FormatWithSuffix([bigint] $whole, [decimal] $scale, [string] $suffix) {
-        [decimal]$val  = ($whole * 100) / $scale
-        $ceilValue     = [math]::Round($val/10)/10
-        $dec           = $this.GetDecimal($ceilValue)
-        return ("{0:F$dec}$suffix" -f $ceilValue)
-    }
+        public static Number operator *(Number a, Number b)
+        {
+            return new Number(
+                BigInteger.Multiply(a._numerator, b._numerator),
+                BigInteger.Multiply(a._denominator, b._denominator));
+        }
 
-    [string] FormatCompact() {
-        # now you can format the integer part for K/M/B suffixes:
-        $whole = [bigint]::Divide($this.Numerator, $this.Denominator)
-        # Write-Host "$(FormatLargeNumber ([decimal]4667273922))"
-        switch ($whole) {
-            { $_ -lt 1e3 } {$dec = $this.GetDecimal([decimal]$whole); return $whole.ToString("F$dec")}
-            { $_ -lt 1e6 } { return $this.FormatWithSuffix($whole, 1e3, 'K') }
-            { $_ -lt 1e9 } { return $this.FormatWithSuffix($whole, 1e6, 'M') }
-            { $_ -lt 1e12 } { return $this.FormatWithSuffix($whole, 1e9, 'B') }
-            { $_ -lt 1e15 } { return $this.FormatWithSuffix($whole, 1e12, 'T') }
-            { $_ -lt 1e18 } { return $this.FormatWithSuffix($whole, 1e15, 'Qa') }
-            { $_ -lt 1e21 } { return $this.FormatWithSuffix($whole, 1e18, 'Qi') }
-            { $_ -lt 1e24 } { return $this.FormatWithSuffix($whole, 1e21, 'Sx') }
-            { $_ -lt 1e27 } { return $this.FormatWithSuffix($whole, 1e24, 'Sp') }
-            Default {
-                # Fallback to scientific notation with one decimal place
-                return ($whole).ToString("E1")
+        public static Number operator /(Number a, Number b)
+        {
+            return new Number(
+                BigInteger.Multiply(a._numerator, b._denominator),
+                BigInteger.Multiply(a._denominator, b._numerator));
+        }
+        
+        // Formats with K/M/B/T/Qa/Qi/Sx/Sp suffix and rounds up one decimal
+        public string FormatCompact()
+        {
+            if (_numerator < 10) return this.ToString();
+            
+            BigInteger whole = BigInteger.Divide(_numerator, _denominator);
+            decimal decVal;
+            string suffix;
+
+            if (whole < BigInteger.Pow(10, 3))
+            {
+                decVal = (decimal)whole;
+                suffix = string.Empty;
+                if (decVal < 10)
+                    return decVal.ToString("F1");
+                else
+                    return decVal.ToString("F0");
             }
+            else if (whole < BigInteger.Pow(10, 6))
+            {
+                decVal = ((decimal)whole * 100) / 1000M;
+                suffix = "K";
+            }
+            else if (whole < BigInteger.Pow(10, 9))
+            {
+                decVal = ((decimal)whole * 100) / 1000000M;
+                suffix = "M";
+            }
+            else if (whole < BigInteger.Pow(10, 12))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000M;
+                suffix = "B";
+            }
+            else if (whole < BigInteger.Pow(10, 15))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000000M;
+                suffix = "T";
+            }
+            else if (whole < BigInteger.Pow(10, 18))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000000000M;
+                suffix = "Qa";
+            }
+            else if (whole < BigInteger.Pow(10, 21))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000000000000M;
+                suffix = "Qi";
+            }
+            else if (whole < BigInteger.Pow(10, 24))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000000000000000M;
+                suffix = "Sx";
+            }
+            else if (whole < BigInteger.Pow(10, 27))
+            {
+                decVal = ((decimal)whole * 100) / 1000000000000000000000000M;
+                suffix = "Sp";
+            }
+            else
+            {
+                return ((decimal)whole).ToString("E1");
+            }
+
+            // Round up to one decimal
+            decimal rounded = Math.Ceiling(decVal / 10) / 10;
+            int decimals = rounded < 10 ? 1 : 0;
+            if (decimals == 1)
+                return String.Format("{0:F1}{1}", rounded, suffix);
+            else
+                return String.Format("{0}{1}", (int)rounded, suffix);
         }
-        return ""
     }
 }
+"@
+
+Add-Type -TypeDefinition $cs -Language CSharp -ReferencedAssemblies $ref

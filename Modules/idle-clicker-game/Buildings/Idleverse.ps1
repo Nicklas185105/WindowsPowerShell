@@ -1,4 +1,6 @@
-$global:BuildingData.Idleverse = [BuildingDefinition]::new("Idleverse", 12000000000000000000000, 8300000000000, $global:Keys.N8)
+using namespace IdleClicker
+
+$global:BuildingData.Idleverse = [BuildingDefinition]::new("Idleverse", [Number]::new("12000000000000000000000.0"), [Number]::new("8300000000000.0"), $global:Keys.N8)
 $global:BuildingData.Idleverse.Upgrades = [UpgradeData]::new()
 
 # — Idleverse efficiency upgrades (×2) —

@@ -1,4 +1,6 @@
-$global:BuildingData.Portal = [BuildingDefinition]::new("Portal", 1000000000000, 10000000, $global:Keys.N1)
+using namespace IdleClicker
+
+$global:BuildingData.Portal = [BuildingDefinition]::new("Portal", [Number]::new("1000000000000.0"), [Number]::new("10000000.0"), $global:Keys.N1)
 $global:BuildingData.Portal.Upgrades = [UpgradeData]::new()
 
 # — Portal efficiency upgrades (×2) —

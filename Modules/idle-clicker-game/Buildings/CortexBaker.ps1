@@ -1,4 +1,6 @@
-$global:BuildingData.CortexBaker = [BuildingDefinition]::new("Cortex Baker", 1900000000000000000000000, 64000000000000, $global:Keys.N9)
+using namespace IdleClicker
+
+$global:BuildingData.CortexBaker = [BuildingDefinition]::new("Cortex Baker", [Number]::new("1900000000000000000000000.0"), [Number]::new("64000000000000.0"), $global:Keys.N9)
 $global:BuildingData.CortexBaker.Upgrades = [UpgradeData]::new()
 
 # — Cortex Baker efficiency upgrades (×2) —

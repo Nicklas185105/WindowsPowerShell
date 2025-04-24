@@ -1,4 +1,6 @@
-$global:BuildingData.Grandma = [BuildingDefinition]::new("Grandma", 100, 1, $global:Keys.D2)
+using namespace IdleClicker
+
+$global:BuildingData.Grandma = [BuildingDefinition]::new("Grandma", [Number]::new("100.0"), [Number]::new("1.0"), $global:Keys.D2)
 $global:BuildingData.Grandma.Upgrades = [UpgradeData]::new()
 
 # — Grandma efficiency upgrades (×2) —

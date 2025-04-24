@@ -1,4 +1,6 @@
-$global:BuildingData.AntimatterCondenser = [BuildingDefinition]::new("Antimatter Condenser", 170000000000000, 430000000, $global:Keys.N3)
+using namespace IdleClicker
+
+$global:BuildingData.AntimatterCondenser = [BuildingDefinition]::new("Antimatter Condenser", [Number]::new("170000000000000.0"), [Number]::new("430000000.0"), $global:Keys.N3)
 $global:BuildingData.AntimatterCondenser.Upgrades = [UpgradeData]::new()
 
 # — Antimatter Condenser efficiency upgrades (×2) —

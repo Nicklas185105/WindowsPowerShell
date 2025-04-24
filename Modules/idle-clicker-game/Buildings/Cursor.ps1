@@ -1,4 +1,6 @@
-$global:BuildingData.Cursor = [BuildingDefinition]::new("Cursor", 15, 0.1, $global:Keys.D1)
+using namespace IdleClicker
+
+$global:BuildingData.Cursor = [BuildingDefinition]::new("Cursor", [Number]::new("15"), [Number]::new("0.1"), $global:Keys.D1)
 $global:BuildingData.Cursor.Upgrades = [UpgradeData]::new()
 
 # — Plain / Berrylium / Blueberrylium (×2 efficiency) —

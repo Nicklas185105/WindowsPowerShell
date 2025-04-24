@@ -1,4 +1,4 @@
-$global:BuildingData.You = [BuildingDefinition]::new("You", 540000000000000000000000000, 510000000000000, $global:Keys.N0)
+$global:BuildingData.You = [BuildingDefinition]::new("You", [Number]::new("540000000000000000000000000.0"), [Number]::new("510000000000000.0"), $global:Keys.N0)
 $global:BuildingData.You.Upgrades = [UpgradeData]::new()
 
 # — You efficiency upgrades (×2) —
