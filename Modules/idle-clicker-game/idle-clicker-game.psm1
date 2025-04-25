@@ -92,19 +92,27 @@ function Start-IdleClickerGame-form {
 }
 
 function Start-IdleClickerGame-Debug {
+	Clear-Host
+	
 	Load-IdleClickerGame
 
 	Write-Host "Debugging IdleClickerGame..."
 	$percentNum = $global:BuildingData.Shipment.GetCurrentIncome() / $global:Data.IdleIncome * [Number]::new('100')
 	# $percentage = [math]::Round( $percentNum.ToDecimal(), 2 )
 	Write-Host "Clicks: $($global:Data.Clicks)"
-	Write-Host "Base Income: $($global:BuildingData.Shipment.Income.ToString())"
+	Write-Host "$($global:Data.Clicks.Numerator) | $($global:Data.Clicks.Denominator)"
+	Write-Host "Base Income: $($global:BuildingData.Shipment.Income)"
 	Write-Host "Total Income: $($global:BuildingData.Shipment.GetCurrentIncome())"
 	Write-Host "$($percentNum.ToDecimal())"
 	Write-Host "Info: $($global:BuildingData.Shipment.GetInfo())"
+
+	$screen = [GameScreen]::new()
+	$screen.Show($global:Data, $global:BuildingData)
 }
 
 function Start-IdleClickerGame {
+	Clear-Host
+	
 	Load-IdleClickerGame
 
 	[Terminal.Gui.Application]::Init()

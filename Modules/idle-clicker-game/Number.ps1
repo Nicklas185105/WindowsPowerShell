@@ -63,7 +63,7 @@ namespace IdleClicker {
             // width = number of decimal places = (length of _denominator as string) - 1
             int width = _denominator.ToString().Length - 1;
             string frac = rem.ToString().PadLeft(width, '0');
-            return String.Format("{0}.{1}", whole, frac);
+            return String.Format("{0}.{1}", whole, frac.TrimEnd('0'));
         }
 
         // Factory for operator results
@@ -157,51 +157,132 @@ namespace IdleClicker {
             }
             else if (whole < BigInteger.Pow(10, 6))
             {
-                decVal = ((decimal)whole * 100) / 1000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Parse("1000"));
                 suffix = "K";
             }
             else if (whole < BigInteger.Pow(10, 9))
             {
-                decVal = ((decimal)whole * 100) / 1000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 6));
                 suffix = "M";
             }
             else if (whole < BigInteger.Pow(10, 12))
             {
-                decVal = ((decimal)whole * 100) / 1000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 9));
                 suffix = "B";
             }
             else if (whole < BigInteger.Pow(10, 15))
             {
-                decVal = ((decimal)whole * 100) / 1000000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 12));
                 suffix = "T";
             }
             else if (whole < BigInteger.Pow(10, 18))
             {
-                decVal = ((decimal)whole * 100) / 1000000000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 15));
                 suffix = "Qa";
             }
             else if (whole < BigInteger.Pow(10, 21))
             {
-                decVal = ((decimal)whole * 100) / 1000000000000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 18));
                 suffix = "Qi";
             }
             else if (whole < BigInteger.Pow(10, 24))
             {
-                decVal = ((decimal)whole * 100) / 1000000000000000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 21));
                 suffix = "Sx";
             }
             else if (whole < BigInteger.Pow(10, 27))
             {
-                decVal = ((decimal)whole * 100) / 1000000000000000000000000M;
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 24));
                 suffix = "Sp";
             }
-            else
+            else if (whole < BigInteger.Pow(10, 30))
             {
-                return ((decimal)whole).ToString("E1");
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 27));
+                suffix = "Oc";
+            }
+            else if (whole < BigInteger.Pow(10, 33))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 30));
+                suffix = "No";
+            }
+            else if (whole < BigInteger.Pow(10, 36))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 33));
+                suffix = "Dc";
+            }
+            else if (whole < BigInteger.Pow(10, 39))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 36));
+                suffix = "Udc";
+            }
+            else if (whole < BigInteger.Pow(10, 42))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 39));
+                suffix = "Ddc";
+            }
+            else if (whole < BigInteger.Pow(10, 45))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 42));
+                suffix = "Tdc";
+            }
+            else if (whole < BigInteger.Pow(10, 48))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 45));
+                suffix = "Qadc";
+            }
+            else if (whole < BigInteger.Pow(10, 51))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 48));
+                suffix = "Qidc";
+            }
+            else if (whole < BigInteger.Pow(10, 54))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 51));
+                suffix = "Sxdc";
+            }
+            else if (whole < BigInteger.Pow(10, 57))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 54));
+                suffix = "Spdc";
+            }
+            else if (whole < BigInteger.Pow(10, 60))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 57));
+                suffix = "Ocdc";
+            }
+            else if (whole < BigInteger.Pow(10, 63))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 60));
+                suffix = "Nmdc";
+            }
+            else if (whole < BigInteger.Pow(10, 66))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 63));
+                suffix = "Vg";
+            }
+            else if (whole < BigInteger.Pow(10, 69))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 66));
+                suffix = "Uvg";
+            }
+            else if (whole < BigInteger.Pow(10, 72))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 69));
+                suffix = "DvG";
+            }
+            else if (whole < BigInteger.Pow(10, 75))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 72));
+                suffix = "Tvg";
+            }
+            else //if (whole < BigInteger.Pow(10, 78))
+            {
+                decVal = (decimal)((whole * 100) / BigInteger.Pow(10, 75));
+                suffix = "Qav";
             }
 
             // Round up to one decimal
-            decimal rounded = Math.Ceiling(decVal / 10) / 10;
+            decimal rounded = Math.Round(decVal / 10) / 10;
             int decimals = rounded < 10 ? 1 : 0;
             if (decimals == 1)
                 return String.Format("{0:F1}{1}", rounded, suffix);

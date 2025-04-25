@@ -1,9 +1,10 @@
 using namespace Terminal.Gui
+using namespace IdleClicker
 
 class UpgradeDefinition {
 	[string]$Name
 	[int]$RequiredCount    # Minimum buildings owned to unlock the upgrade
-	[bigint]$BaseCost
+	[Number]$BaseCost
 	[string]$Description
 	[int]$ID
 	[ScriptBlock]$Effect   # Code to apply the upgrade effect
@@ -14,7 +15,7 @@ class UpgradeDefinition {
 	[Button]$BuyButton
 	[Button]$InfoButton
 
-	UpgradeDefinition([string]$name, [int]$requiredCount, [bigint]$baseCost, [string]$description, [int]$id, [ScriptBlock]$effect) {
+	UpgradeDefinition([string]$name, [int]$requiredCount, [Number]$baseCost, [string]$description, [int]$id, [ScriptBlock]$effect) {
 		$this.Name = $name
 		$this.RequiredCount = $requiredCount
 		$this.BaseCost = $baseCost

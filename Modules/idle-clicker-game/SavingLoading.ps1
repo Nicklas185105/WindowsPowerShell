@@ -39,7 +39,7 @@ function Load-IdleClickerGame {
     $global:BuildingData.LoadOwnedBuildings((ConvertTo-Hashtable $loadedState.Owned))
     # Update IdleIncome using your calculation function (assuming it uses current building counts)
     $global:Data.UpdateIdleIncomeValue()
-    Write-Host "Game loaded from $FilePath. Total points: $($global:Data.Clicks)"
+    Write-Host "Game loaded from $FilePath."
 }
 
 function ConvertTo-Hashtable {

@@ -5,137 +5,137 @@ $global:BuildingData.FractalEngine.Upgrades = [UpgradeData]::new()
 
 # — Fractal Engine efficiency upgrades (×2) —
 
-$global:BuildingData.FractalEngine.Upgrades.Plain = [UpgradeDefinition]::new(
-	"Metabakeries",
-	1, # Own 1 fractal engine
-	3100000000000000000, # Base price: 3.1 quintillion
-	"Fractal engines are twice as efficient.",
-	522, # ID
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Plain = [UpgradeDefinition]::new(
+    "Cheap hoes",
+    1, # Own 1 farm
+    [Number]::new("11000"), # Base price
+    "Farms are twice as efficient.",
+    10, # ID
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Berrylium = [UpgradeDefinition]::new(
-	"Mandelbrown sugar",
-	5, # Own 5 fractal engines
-	15500000000000000000, # Base price: 15.5 quintillion
-	"Fractal engines are twice as efficient.",
-	523,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Berrylium = [UpgradeDefinition]::new(
+    "Fertilizer",
+    5,
+    [Number]::new("55000"),
+    "Farms are twice as efficient.",
+    11,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Blueberrylium = [UpgradeDefinition]::new(
-	"Fractoids",
-	25, # Own 25 fractal engines
-	155000000000000000000, # Base price: 155 quintillion
-	"Fractal engines are twice as efficient.",
-	524,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Blueberrylium = [UpgradeDefinition]::new(
+    "Cookie trees",
+    25,
+    [Number]::new("550000"),
+    "Farms are twice as efficient.",
+    12,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Chalcedhoney = [UpgradeDefinition]::new(
-	"Nested universe theory",
-	50, # Own 50 fractal engines
-	15500000000000000000000, # Base price: 15.5 sextillion
-	"Fractal engines are twice as efficient.",
-	525,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Chalcedhoney = [UpgradeDefinition]::new(
+    "Genetically-modified cookies",
+    50,
+    [Number]::new("55000000"), # 55 million
+    "Farms are twice as efficient.",
+    45,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Buttergold = [UpgradeDefinition]::new(
-	"Menger sponge cake",
-	100, # Own 100 fractal engines
-	1550000000000000000000000, # Base price: 1.55 septillion
-	"Fractal engines are twice as efficient.",
-	526,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Buttergold = [UpgradeDefinition]::new(
+    "Gingerbread scarecrows",
+    100,
+    [Number]::new("5500000000"), # 5.5 billion
+    "Farms are twice as efficient.",
+    111,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Sugarmuck = [UpgradeDefinition]::new(
-	"One particularly good-humored cow",
-	150, # Own 150 fractal engines
-	155000000000000000000000000, # Base price: 155 septillion
-	"Fractal engines are twice as efficient.",
-	527,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Sugarmuck = [UpgradeDefinition]::new(
+    "Pulsar sprinklers",
+    150,
+    [Number]::new("550000000000"), # 550 billion
+    "Farms are twice as efficient.",
+    193,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Jetmint = [UpgradeDefinition]::new(
-	"Chocolate ouroboros",
-	200, # Own 200 fractal engines
-	155000000000000000000000000000, # Base price: 155 octillion
-	"Fractal engines are twice as efficient.",
-	528,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Jetmint = [UpgradeDefinition]::new(
+    "Fudge fungus",
+    200,
+    [Number]::new("550000000000000"), # 550 trillion
+    "Farms are twice as efficient.",
+    295,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Cherrysilver = [UpgradeDefinition]::new(
-	"Nested",
-	250, # Own 250 fractal engines
-	155000000000000000000000000000000, # Base price: 155 nonillion
-	"Fractal engines are twice as efficient.",
-	529,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Cherrysilver = [UpgradeDefinition]::new(
+    "Wheat triffids",
+    250,
+    [Number]::new("550000000000000000"), # 550 quadrillion
+    "Farms are twice as efficient.",
+    308,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Hazelrald = [UpgradeDefinition]::new(
-	"Space-filling fibers",
-	300, # Own 300 fractal engines
-	155000000000000000000000000000000000, # Base price: 155 decillion
-	"Fractal engines are twice as efficient.",
-	530,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Hazelrald = [UpgradeDefinition]::new(
+    "Humane pesticides",
+    300,
+    [Number]::new("550000000000000000000"), # 550 quintillion
+    "Farms are twice as efficient.",
+    429,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Mooncandy = [UpgradeDefinition]::new(
-	"Endless book of prose",
-	350, # Own 350 fractal engines
-	155000000000000000000000000000000000000, # Base price: 155 undecillion
-	"Fractal engines are twice as efficient.",
-	531,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Mooncandy = [UpgradeDefinition]::new(
+    "Barnstars",
+    350,
+    [Number]::new("550000000000000000000000"), # 550 sextillion
+    "Farms are twice as efficient.",
+    481,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Astrofudge = [UpgradeDefinition]::new(
-	"The set of all sets",
-	400, # Own 400 fractal engines
-	1550000000000000000000000000000000000000000, # Base price: 1.55 tredecillion
-	"Fractal engines are twice as efficient.",
-	532,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Astrofudge = [UpgradeDefinition]::new(
+    "Lindworms",
+    400,
+    [Number]::new("5500000000000000000000000000"), # 5.5 octillion
+    "Farms are twice as efficient.",
+    507,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Alabascream = [UpgradeDefinition]::new(
-	"This upgrade",
-	450, # Own 450 fractal engines
-	15000000000000000000000000000000000000000000000, # Base price: 15 quattuordecillion
-	"Fractal engines are twice as efficient.",
-	676,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Alabascream = [UpgradeDefinition]::new(
+    "Global seed vault",
+    450,
+    [Number]::new("5500000000000000000000000000000"), # 55 nonillion
+    "Farms are twice as efficient.",
+    663,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Iridyum = [UpgradeDefinition]::new(
-	"A box",
-	500, # Own 500 fractal engines
-	155000000000000000000000000000000000000000000000000, # Base price: 155 quindecillion
-	"Fractal engines are twice as efficient.",
-	714,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Iridyum = [UpgradeDefinition]::new(
+    "Reverse-veganism",
+    500,
+    [Number]::new("55000000000000000000000000000000000"), # 550 decillion
+    "Farms are twice as efficient.",
+    701,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Glucosmium = [UpgradeDefinition]::new(
-	"Multiscale profiling",
-	550, # Own 550 fractal engines
-	1550000000000000000000000000000000000000000000000000000, # Base price: 1.55 septendecillion
-	"Fractal engines are twice as efficient.",
-	757,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Glucosmium = [UpgradeDefinition]::new(
+    "Cookie mulch",
+    550,
+    [Number]::new("550000000000000000000000000000000000000"), # 5.5 duodecillion
+    "Farms are twice as efficient.",
+    744,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
 
-$global:BuildingData.FractalEngine.Upgrades.Glimmeringue = [UpgradeDefinition]::new(
-	"The more they stay the same",
-	600, # Own 600 fractal engines
-	15500000000000000000000000000000000000000000000000000000000, # Base price: 15.5 octodecillion
-	"Fractal engines are twice as efficient.",
-	854,
-	{ param($building) $building.Income *= 2 }
+$global:BuildingData.Farm.Upgrades.Glimmeringue = [UpgradeDefinition]::new(
+    "Self-driving tractors",
+    600,
+    [Number]::new("55000000000000000000000000000000000000000000"), # 55 tredecillion
+    "Farms are twice as efficient.",
+    841,
+    { param($building) $building.Income *= [Number]::new("2") }
 )
