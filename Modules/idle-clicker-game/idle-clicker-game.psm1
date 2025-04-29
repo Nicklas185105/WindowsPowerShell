@@ -71,10 +71,10 @@ function Start-IdleClickerGame-form {
 	$form.Text = 'Hello PowerShell GUI'
 	$form.Size = New-Object System.Drawing.Size(300, 200)
 
-	$counter = 0
+	$global:counter = 0
 
 	$label = New-Object System.Windows.Forms.Label
-	$label.Text = "Counter: $counter"
+	$label.Text = "Counter: $global:counter"
 	$label.Location = New-Object System.Drawing.Point(100, 30)
 	$label.AutoSize = $true
 	$form.Controls.Add($label)
@@ -83,12 +83,13 @@ function Start-IdleClickerGame-form {
 	$button.Text = 'Click Me!'
 	$button.Location = New-Object System.Drawing.Point(100, 70)
 	$button.Add_Click({
-			$counter++
-			$label.Text = "Counter: $counter"
+			$global:counter++
+			$label.Text = "Counter: $global:counter"
 		})
 	$form.Controls.Add($button)
 
-	$form.ShowDialog()
+	# $form.ShowDialog()
+	[System.Windows.Forms.Application]::Run($form) | Out-Null
 }
 
 function Start-IdleClickerGame-Debug {

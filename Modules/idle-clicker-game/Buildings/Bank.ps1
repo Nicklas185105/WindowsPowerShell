@@ -1,6 +1,6 @@
 using namespace IdleClicker
 
-$global:BuildingData.Bank = [BuildingDefinition]::new("Bank", [Number]::new("1400000.0"), [Number]::new("1400.0"), $global:Keys.D6)
+$global:BuildingData.Bank = [BuildingDefinition]::new("Bank", [Number]::new("$([bigint]::Pow(10,6) + [bigint]::Pow(10,5) * 4)"), [Number]::new("$([bigint]::Pow(10,3) + [bigint]::Pow(10,2) * 4)"), $global:Keys.D6)
 $global:BuildingData.Bank.Upgrades = [UpgradeData]::new()
 
 # — Bank efficiency upgrades (×2) —
@@ -8,7 +8,7 @@ $global:BuildingData.Bank.Upgrades = [UpgradeData]::new()
 $global:BuildingData.Bank.Upgrades.Plain = [UpgradeDefinition]::new(
     "Taller tellers",
     1,  # Own 1 bank
-    [Number]::new("14000000"),  # Base price
+    [Number]::new("$([bigint]::Pow(10,7) + [bigint]::Pow(10,6) * 4)"),  # Base price
     "Banks are twice as efficient.",
     232, # ID
     { param($building) $building.Income *= [Number]::new("2") }
@@ -17,7 +17,7 @@ $global:BuildingData.Bank.Upgrades.Plain = [UpgradeDefinition]::new(
 $global:BuildingData.Bank.Upgrades.Berrylium = [UpgradeDefinition]::new(
     "Scissor-resistant credit cards",
     5,  # Own 5 banks
-    [Number]::new("70000000"),  # Base price
+    [Number]::new("$([bigint]::Pow(10,6) * 7)"),  # Base price
     "Banks are twice as efficient.",
     233,
     { param($building) $building.Income *= [Number]::new("2") }
