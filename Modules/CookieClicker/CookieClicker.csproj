@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>CookieClicker</AssemblyName>
+    <LangVersion>Latest</LangVersion>
+
+    <!-- Force Release build -->
+    <Configuration>Release</Configuration>
+
+    <!-- Force output to project root without tfm folder -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>$(MSBuildProjectDirectory)\\</OutputPath>
+    <OutputType>Library</OutputType>
+
+    <!-- Optional: Don't create obj folder clutter either -->
+    <!-- <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)\\obj\\</BaseIntermediateOutputPath> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="CookieClicker.cs" />
+    <Compile Include="GameScreen.cs" />
+    <Compile Include="GameData.cs" />
+    <Compile Include="Number.cs" />
+  </ItemGroup>
+
+</Project>

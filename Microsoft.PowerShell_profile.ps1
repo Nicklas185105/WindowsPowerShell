@@ -11,7 +11,7 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # Module Imports
 # -------------------------------
 # List of modules to import if available. You may install missing ones.
-$modules = @('posh-git', 'PSReadLine', 'idle-clicker-game', 'Microsoft.PowerShell.ConsoleGuiTools')
+$modules = @('posh-git', 'PSReadLine', 'idle-clicker-game', 'Microsoft.PowerShell.ConsoleGuiTools', 'CookieClicker')
 foreach ($module in $modules) {
 	if (Get-Module -ListAvailable -Name $module) {
 		Import-Module $module -ErrorAction SilentlyContinue
@@ -55,7 +55,7 @@ Get-ChildItem -Path $scriptFolder -Filter *.ps1 | ForEach-Object {
 # -------------------------------
 # Define your custom alias names in a global variable.
 # Update this list with any additional custom aliases you create.
-$Global:MyCustomAliases = $Global:MyCustomAliases + @("ll", "la", "grep", "cls", "showall", "keeponline", "clickergame")
+$Global:MyCustomAliases = $Global:MyCustomAliases + @("ll", "la", "grep", "cls", "showall", "keeponline", "clickergame", "cc")
 
 Set-Alias ll Get-ChildItem
 Set-Alias la "Get-ChildItem -Force"
@@ -67,6 +67,8 @@ Set-Alias -Name showall -Value Show-CustomAliases
 Set-Alias -Name keeponline -Value Keep-Alive
 
 Set-Alias -Name clickergame -Value Start-IdleClickerGame
+
+Set-Alias -Name cc -Value Start-CookieClicker
 
 # -------------------------------
 # Environment Variables
