@@ -20,7 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Buildings\Cursor.cs" />
     <Compile Include="CookieClicker.cs" />
+    <Compile Include="Definitions\BuildingDefinition.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="Number.cs" />
