@@ -6,8 +6,15 @@ public class CookieClicker
 
     public CookieClicker()
     {
-        Console.WriteLine("" + GameData.Instance.LastSaveTime);
-        _gameScreen = new GameScreen();
+        try
+        {
+            _gameScreen = new GameScreen();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Constructor failed: " + ex.Message);
+            throw; // let it bubble up so you still see it in PowerShell
+        }
     }
 
     public void ShowForm()

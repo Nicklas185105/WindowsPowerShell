@@ -1,8 +1,13 @@
 ﻿using CookieClicker.Definitions;
+using System.Numerics;
 
 namespace CookieClicker.Buildings;
 
-public class Cursor : BuildingDefinition
+internal class Cursor : BuildingDefinition
 {
-    public Cursor() : base("Cursor", new Number("15"), new Number("0.1")){}
+    public Cursor() : base(
+        "Cursor",
+        new Number((BigInteger.Pow(10, 1) + 5).ToString()),
+        new Number("0.1"))
+    { }
 }

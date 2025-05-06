@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>CookieClicker</AssemblyName>
@@ -20,7 +20,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Buildings\AlchemyLab.cs" />
+    <Compile Include="Buildings\AntimatterCondenser.cs" />
+    <Compile Include="Buildings\Bank.cs" />
+    <Compile Include="Buildings\Chancemaker.cs" />
+    <Compile Include="Buildings\CortexBaker.cs" />
     <Compile Include="Buildings\Cursor.cs" />
+    <Compile Include="Buildings\Factory.cs" />
+    <Compile Include="Buildings\Farm.cs" />
+    <Compile Include="Buildings\FractalEngine.cs" />
+    <Compile Include="Buildings\Grandma.cs" />
+    <Compile Include="Buildings\Idleverse.cs" />
+    <Compile Include="Buildings\JavascriptConsole.cs" />
+    <Compile Include="Buildings\Mine.cs" />
+    <Compile Include="Buildings\Portal.cs" />
+    <Compile Include="Buildings\Prism.cs" />
+    <Compile Include="Buildings\Shipment.cs" />
+    <Compile Include="Buildings\Temple.cs" />
+    <Compile Include="Buildings\TimeMachine.cs" />
+    <Compile Include="Buildings\WizardTower.cs" />
+    <Compile Include="Buildings\You.cs" />
     <Compile Include="CookieClicker.cs" />
     <Compile Include="Definitions\BuildingDefinition.cs" />
     <Compile Include="GameScreen.cs" />

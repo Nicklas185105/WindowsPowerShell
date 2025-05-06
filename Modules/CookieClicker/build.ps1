@@ -21,18 +21,18 @@ foreach ($file in $filesToDelete) {
 
 # $csc = $cscPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
 
-
-
 # if (-not $csc) {
 #     Write-Host "❌ Could not find csc.exe (you may need to install .NET Framework Developer Pack)." -ForegroundColor Red
 #     exit 1
 # }
 
+# $files = Get-ChildItem -Path $scriptDir -Filter '*.cs' | ForEach-Object { $_.FullName }
+Write-Host "Compiling files: $($files -join ', ')" -ForegroundColor Yellow
+
 # Build project
 dotnet build --nologo
-
-# $files = Get-ChildItem -Path $scriptDir -Filter '*.cs' | ForEach-Object { $_.FullName }
 # & $csc /target:library /out:CookieClicker.dll $files /reference:System.Windows.Forms.dll,System.Drawing.dll
+
 
 
 # Post-build cleanup

@@ -66,6 +66,7 @@ public class Number : IComparable, IComparable<Number>
         // Split into integer and fractional parts
         var wholeBi = BigInteger.Divide(_numerator, _denominator);
         var remBi = BigInteger.Remainder(_numerator, _denominator);
+
         // Cast parts to decimal (should fit within range)
         var wholeDec = (decimal)wholeBi;
         var remDec = (decimal)remBi;
@@ -93,12 +94,43 @@ public class Number : IComparable, IComparable<Number>
 
     public static Number operator +(Number a, Number b)
     {
-        var den = BigInteger.Multiply(a._denominator, b._denominator);
-        var num = BigInteger.Add(
-            BigInteger.Multiply(a._numerator, b._denominator),
-            BigInteger.Multiply(b._numerator, a._denominator));
+        //Console.WriteLine($"a: {a._numerator} - {a._denominator}");
+        //Console.WriteLine($"b: {b._numerator} - {b._denominator}");
+
+        // Use the larger denominator to preserve higher precision
+        var den = a._denominator > b._denominator ? a._denominator : b._denominator;
+
+        // Cross-multiply numerators as in LCM-based addition
+        var aScaled = BigInteger.Multiply(a._numerator, b._denominator);
+        var bScaled = BigInteger.Multiply(b._numerator, a._denominator);
+        var num = BigInteger.Add(aScaled, bScaled);
+
+        // Both values have been scaled (multiplied by denominators > 1),
+        // so the resulting numerator will contain an extra zero from over-scaling.
+        // We correct this by dividing by 10 to keep the number compact and accurate enough for gameplay.
+        if (a._denominator > BigInteger.One && b._denominator > BigInteger.One)
+            num = BigInteger.Divide(num, 10);
+
         return new Number(num, den);
     }
+
+    //public static Number operator +(Number a, Number b)
+    //{
+    //    Console.WriteLine($"a: {a._numerator} - {a._denominator}");
+    //    Console.WriteLine($"b: {b._numerator} - {b._denominator}");
+    //    BigInteger den = BigInteger.Multiply(a._denominator, b._denominator);
+    //    BigInteger num = BigInteger.Add(
+    //        BigInteger.Multiply(a._numerator, b._denominator),
+    //        BigInteger.Multiply(b._numerator, a._denominator));
+
+    //    var gcd = BigInteger.GreatestCommonDivisor(num, den);
+    //    if (gcd > BigInteger.One)
+    //    {
+    //        num /= gcd;
+    //        den /= gcd;
+    //    }
+    //    return new Number(num, den);
+    //}
 
     public static Number operator ++(Number a)
     {
@@ -151,9 +183,9 @@ public class Number : IComparable, IComparable<Number>
     // Formats with K/M/B/T/Qa/Qi/Sx/Sp suffix and rounds up one decimal
     public string FormatCompact()
     {
-        if (_numerator < 10) return ToString();
-
         var whole = BigInteger.Divide(_numerator, _denominator);
+        if (whole < 10) return ToString();
+
         decimal decVal;
         string suffix;
 

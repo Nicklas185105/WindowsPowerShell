@@ -1,4 +1,6 @@
-﻿namespace CookieClicker;
+﻿using Timer = System.Windows.Forms.Timer;
+
+namespace CookieClicker;
 
 public class GameScreen : Form
 {
@@ -65,18 +67,18 @@ public class GameScreen : Form
         GameData.Instance.IdleIncomeLabel = new Label { Text = "Idle: 0 p/s", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter };
         _lastSaveLabel = new Label { Text = "Last Save: Not saved yet", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter };
 
-        _clickButton = new Button { Text = "Click Me", Dock = DockStyle.Fill, Margin = new Padding(50, 0, 50, 0) };
+        _clickButton = new Button { Text = "Click Me", Dock = DockStyle.Fill, Margin = new Padding(50, 0, 50, 0), Cursor = Cursors.Hand };
         _clickButton.Click += (_, _) =>
         {
             // Increment points on button click
             GameData.Instance.Clicks += GameData.Instance.ClickValue;
-            GameData.Instance.ClicksLabel.Text = $"Points: {GameData.Instance.Clicks}";
+            GameData.Instance.ClicksLabel.Text = $"Points: {GameData.Instance.Clicks.FormatCompact()}";
         };
-        _saveButton = new Button { Text = "Save Game", Dock = DockStyle.Fill };
-        _loadButton = new Button { Text = "Load Game", Dock = DockStyle.Fill };
-        _resetButton = new Button { Text = "Reset Game", Dock = DockStyle.Fill };
-        _exitButton = new Button { Text = "Quit Game", Dock = DockStyle.Fill };
-            
+        _saveButton = new Button { Text = "Save Game", Dock = DockStyle.Fill, Cursor = Cursors.Hand };
+        _loadButton = new Button { Text = "Load Game", Dock = DockStyle.Fill, Cursor = Cursors.Hand };
+        _resetButton = new Button { Text = "Reset Game", Dock = DockStyle.Fill, Cursor = Cursors.Hand };
+        _exitButton = new Button { Text = "Quit Game", Dock = DockStyle.Fill, Cursor = Cursors.Hand };
+
         var saveLoadLayout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -87,7 +89,7 @@ public class GameScreen : Form
         saveLoadLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         saveLoadLayout.Controls.Add(_saveButton, 0, 0);
         saveLoadLayout.Controls.Add(_loadButton, 1, 0);
-            
+
         var resetExitLayout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -99,12 +101,12 @@ public class GameScreen : Form
         resetExitLayout.Controls.Add(_resetButton, 0, 0);
         resetExitLayout.Controls.Add(_exitButton, 1, 0);
 
-        statsLayout.Controls.Add(GameData.Instance.ClicksLabel,0,0);
-        statsLayout.Controls.Add(GameData.Instance.IdleIncomeLabel,0,1);
-        statsLayout.Controls.Add(_clickButton,0,3);
-        statsLayout.Controls.Add(saveLoadLayout,0,5);
-        statsLayout.Controls.Add(resetExitLayout,0,6);
-        statsLayout.Controls.Add(_lastSaveLabel,0,7);
+        statsLayout.Controls.Add(GameData.Instance.ClicksLabel, 0, 0);
+        statsLayout.Controls.Add(GameData.Instance.IdleIncomeLabel, 0, 1);
+        statsLayout.Controls.Add(_clickButton, 0, 3);
+        statsLayout.Controls.Add(saveLoadLayout, 0, 5);
+        statsLayout.Controls.Add(resetExitLayout, 0, 6);
+        statsLayout.Controls.Add(_lastSaveLabel, 0, 7);
         // statsLayout.Controls.Add(_clickButton,0,9);
 
         statsGroup.Controls.Add(statsLayout);
@@ -117,43 +119,71 @@ public class GameScreen : Form
             AutoScroll = true,
             BackColor = Color.WhiteSmoke
         };
-        
+
         var buildingsGroup = new GroupBox
         {
             Text = "Buildings",
             Dock = DockStyle.Fill
         };
-        
+
+        var buildingScroll = new ScrollableControl
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+        };
+
         // Create a vertical layout panel for stat controls
         var buildingsLayout = new TableLayoutPanel
         {
-            Dock = DockStyle.Fill,
-            RowCount = 15,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Top,
+            //RowCount = 15,
             ColumnCount = 1,
             // Padding = new Padding(25, 0, 25, 0)
         };
-        for (var i = 0; i < 15; i++)
+        int buildingCount = GameData.Instance.BuildingDefinitions.Count;
+        for (var i = 0; i < buildingCount; i++)
         {
             buildingsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90));
+            buildingsLayout.RowCount++;
+        }
+        //for (var i = 0; i < 15; i++)
+        //{
+        //    buildingsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90));
+        //}
+
+        foreach (var building in GameData.Instance.BuildingDefinitions)
+        {
+            building.Dock = DockStyle.Fill;
+            building.Cursor = Cursors.Hand;
+            building.Enabled = false;
+            buildingsLayout.Controls.Add(building);
         }
 
-        var cursor = new Buildings.Cursor()
-        {
-            Dock = DockStyle.Fill,
-            // BackColor = Color.LightGray,
-            Cursor = Cursors.Hand,
-            Enabled = false
-        };
-        buildingsLayout.Controls.Add(cursor);
-        
-        buildingsGroup.Controls.Add(buildingsLayout);
+        buildingsLayout.Height = 90 * buildingCount;
+
+        buildingScroll.Controls.Add(buildingsLayout);
+        buildingsGroup.Controls.Add(buildingScroll);
         _rightPanel.Controls.Add(buildingsGroup);
 
         // Add panels to layout
         layout.Controls.Add(_leftPanel, 0, 0);
         layout.Controls.Add(_rightPanel, 1, 0);
 
+        GameData.Instance.IdleTimer = new Timer
+        {
+            Interval = 1000 // 1 second per tick
+        };
+        GameData.Instance.IdleTimer.Tick += AutoClickerTimer_Tick;
+
         // Add layout to form
         Controls.Add(layout);
+    }
+
+    private void AutoClickerTimer_Tick(object sender, EventArgs e)
+    {
+        GameData.Instance.Clicks += GameData.Instance.IdleIncome;
+        GameData.Instance.ClicksLabel.Text = $"Points: {GameData.Instance.Clicks.FormatCompact()}";
     }
 }
