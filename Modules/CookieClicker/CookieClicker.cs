@@ -1,14 +1,21 @@
+using CookieClicker.UI;
+
 namespace CookieClicker;
 
 public class CookieClicker
 {
     private readonly GameScreen _gameScreen;
+    private bool _gameLoaded = false;
 
     public CookieClicker()
     {
         try
         {
+            GameData.Instance.CreateNewInstance();
+            var gameLoaded = SavingLoading.LoadGame();
             _gameScreen = new GameScreen();
+            if (gameLoaded)
+                new ToastNotification("Game loaded from save file successfully!", _gameScreen).Show();
         }
         catch (Exception ex)
         {

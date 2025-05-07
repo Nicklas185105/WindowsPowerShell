@@ -2,15 +2,19 @@
 # Find DLL dynamically
 $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $dllPath = Join-Path $moduleRoot 'CookieClicker.dll'
+$skinDllPath = Join-Path $moduleRoot 'MaterialSkin.dll'
 Write-Host "Loading DLL from $dllPath" -ForegroundColor Cyan
+Write-Host "Loading DLL from $skinDllPath" -ForegroundColor Cyan
 if (!(Test-Path $dllPath)) {
     throw \"Could not find CookieClicker.dll at $dllPath\"
 }
+if (!(Test-Path $skinDllPath)) {
+    throw \"Could not find MaterialSkin.dll at $jsonSkinPath\"
+}
 
 # Load the compiled C# DLL
-# Add-Type -Path $dllPath
-# [Reflection.Assembly]::LoadFrom($dllPath) | Out-Null
-
+Add-Type -Path $skinDllPath
+[Reflection.Assembly]::LoadFrom($skinDllPath) | Out-Null
 $assemblyBytes = [System.IO.File]::ReadAllBytes($dllPath)
 [Reflection.Assembly]::Load($assemblyBytes)
 

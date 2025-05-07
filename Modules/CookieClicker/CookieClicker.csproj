@@ -42,9 +42,17 @@
     <Compile Include="Buildings\You.cs" />
     <Compile Include="CookieClicker.cs" />
     <Compile Include="Definitions\BuildingDefinition.cs" />
+    <Compile Include="DTO\SaveFile.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="Number.cs" />
+    <Compile Include="SavingLoading.cs" />
+    <Compile Include="UI\ToastNotification.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialSkin.2" Version="2.3.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

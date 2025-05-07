@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace CookieClicker;
 
-public class Number : IComparable, IComparable<Number>
+internal class Number : IComparable, IComparable<Number>
 {
     private readonly BigInteger _numerator;
     private BigInteger _denominator;

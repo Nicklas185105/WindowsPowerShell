@@ -38,7 +38,17 @@ dotnet build --nologo
 # Post-build cleanup
 $extraFiles = @(
     '.\\CookieClicker.pdb',
-    '.\\CookieClicker.deps.json'
+    '.\\CookieClicker.deps.json',
+    '.\\Microsoft.Bcl.AsyncInterfaces.dll',
+    '.\\System.Buffers.dll',
+    '.\\System.IO.Pipelines.dll',
+    '.\\System.Memory.dll',
+    '.\\System.Numerics.Vectors.dll',
+    '.\\System.Runtime.CompilerServices.Unsafe.dll',
+    '.\\System.Text.Encodings.Web.dll',
+    '.\\System.Text.Json.dll',
+    '.\\System.Threading.Tasks.Extensions.dll',
+    '.\\System.ValueTuple.dll'
 )
 
 foreach ($file in $extraFiles) {

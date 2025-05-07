@@ -5,7 +5,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace CookieClicker;
 
-public class GameData
+internal class GameData
 {
     // singleton instance
     private static GameData _instance;
@@ -39,10 +39,20 @@ public class GameData
 
     private GameData()
     {
+        IdleTimer = new Timer
+        {
+            Interval = 1000 // 1 second per tick
+        };
         Clicks = new Number("0");
         IdleIncome = new Number("0");
         ClickValue = new Number("1");
         LastSaveTime = DateTime.Now;
+    }
+
+    public void CreateNewInstance()
+    {
+        _instance = new GameData();
+        _buildingDefinitions = CreateBuildings();
     }
 
     public void CalculateIdleIncome()
@@ -53,7 +63,6 @@ public class GameData
             IdleIncome += def.Income;
         }
         IdleIncomeLabel.Text = $"Idle: {IdleIncome.FormatCompact()} p/s";
-        Console.WriteLine($"IdleIncome: {IdleIncome.ToString()}");
         if (!IdleTimer.Enabled && IdleIncome > new Number("0"))
             IdleTimer.Start();
     }
