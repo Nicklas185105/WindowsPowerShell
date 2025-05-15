@@ -42,6 +42,8 @@
     <Compile Include="Buildings\You.cs" />
     <Compile Include="CookieClicker.cs" />
     <Compile Include="Definitions\BuildingDefinition.cs" />
+    <Compile Include="Definitions\UpgradeDefinition.cs" />
+    <Compile Include="Definitions\UpgradeType.cs" />
     <Compile Include="DTO\SaveFile.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="GameData.cs" />

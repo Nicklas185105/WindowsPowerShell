@@ -10,6 +10,7 @@ internal class GameData
     // singleton instance
     private static GameData _instance;
     public static GameData Instance => _instance ??= new GameData();
+    public GameScreen Screen { get; set; }
 
     private Number _clicks;
     private List<BuildingDefinition> _buildingDefinitions;

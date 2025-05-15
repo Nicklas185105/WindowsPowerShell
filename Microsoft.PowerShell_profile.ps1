@@ -27,7 +27,7 @@ oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/clean-detailed.omp.json" | 
 # Script Imports
 # -------------------------------
 # Set the path to your Scripts folder
-$scriptFolder = "$HOME\Documents\WindowsPowerShell\Scripts"
+$scriptFolder = "$HOME\Documents\PowerShell\Scripts"
 
 # Dot source each PowerShell script in the folder
 Get-ChildItem -Path $scriptFolder -Filter *.ps1 | ForEach-Object {
@@ -149,9 +149,9 @@ Set-PSReadLineOption -MaximumHistoryCount 4096
 # Additional Customizations
 # -------------------------------
 # Optionally load an additional custom profile script if it exists.
-$customProfile = "$env:USERPROFILE\Documents\PowerShell\profile_custom.ps1"
-if (Test-Path $customProfile) {
-	. $customProfile
-}
+# $customProfile = "$env:USERPROFILE\Documents\PowerShell\profile_custom.ps1"
+# if (Test-Path $customProfile) {
+# 	. $customProfile
+# }
 
 Write-Host "PowerShell profile loaded successfully!" -ForegroundColor Green

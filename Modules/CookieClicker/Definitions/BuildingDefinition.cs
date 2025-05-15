@@ -6,9 +6,10 @@ internal abstract class BuildingDefinition : MaterialCard
 {
     private Number BaseCost { get; set; }
     private Number Cost => (BaseCost * new Number("1.15").Pow(new Number(Owned.ToString()))).Ceiling();
-    private Number BaseIncome { get; set; }
+    public Number BaseIncome { get; set; }
     public Number Income => BaseIncome * new Number(Owned.ToString());
     public int Owned { get; set; }
+    public List<UpgradeDefinition> Upgrades { get; set; } = new List<UpgradeDefinition>();
 
     private Label PriceLabel { get; set; }
     private Label OwnedLabel { get; set; }
@@ -21,6 +22,7 @@ internal abstract class BuildingDefinition : MaterialCard
         Owned = 0;
 
         Padding = new Padding(10);
+        Margin = new Padding(15, 0, 15, 15);
         BackColor = Color.White;
         MouseClick += (_, _) => BuyBuilding();
         //MouseDown
@@ -108,6 +110,8 @@ internal abstract class BuildingDefinition : MaterialCard
 
         GameData.Instance.Clicks -= Cost;
         Owned++;
+
+        GameData.Instance.Screen.RefreshUpgrades();
 
         GameData.Instance.CalculateIdleIncome();
         UpdateLabels();

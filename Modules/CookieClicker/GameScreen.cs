@@ -7,6 +7,7 @@ internal class GameScreen : MaterialForm
 {
     private Panel _leftPanel;
     private Panel _rightPanel;
+    private TableLayoutPanel _upgradesLayout;
 
     // UI Elements for the stats panel
     // private Label _pointsLabel;
@@ -143,19 +144,64 @@ internal class GameScreen : MaterialForm
         _rightPanel = new Panel
         {
             Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
             AutoScroll = true,
             BackColor = Color.WhiteSmoke
+        };
+
+        var rightPanelLayout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
+            ColumnCount = 1,
+            RowCount = 2,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink
+        };
+        rightPanelLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 110));
+        rightPanelLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+
+        var upgradesGroup = new MaterialCard
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(15, 15, 15, 0),
+            BackColor = Color.WhiteSmoke
+        };
+
+        var upgradeScroll = new ScrollableControl
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
+            AutoScroll = true,
+        };
+
+        _upgradesLayout = new TableLayoutPanel
+        {
+            AutoSize = true,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Top,
+            RowCount = 1,
         };
 
         var buildingsGroup = new MaterialCard
         {
             Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(15, 15, 15, 15),
             BackColor = Color.WhiteSmoke
         };
 
         var buildingScroll = new ScrollableControl
         {
             Dock = DockStyle.Fill,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
             AutoScroll = true
         };
 
@@ -163,6 +209,8 @@ internal class GameScreen : MaterialForm
         {
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
             Dock = DockStyle.Top,
             ColumnCount = 1,
         };
@@ -176,16 +224,21 @@ internal class GameScreen : MaterialForm
 
         foreach (var building in GameData.Instance.BuildingDefinitions)
         {
+            if (building.Name == "Cursor") building.Margin = new Padding(15, 15, 15, 15);
             building.Dock = DockStyle.Fill;
-            //building.Cursor = Cursors.Hand;
-            //building.Enabled = false;
             buildingsLayout.Controls.Add(building);
         }
+
+        upgradeScroll.Controls.Add(_upgradesLayout);
+        upgradesGroup.Controls.Add(upgradeScroll);
+        rightPanelLayout.Controls.Add(upgradesGroup, 0, 0);
 
         buildingsLayout.Height = 90 * buildingCount;
         buildingScroll.Controls.Add(buildingsLayout);
         buildingsGroup.Controls.Add(buildingScroll);
-        _rightPanel.Controls.Add(buildingsGroup);
+
+        rightPanelLayout.Controls.Add(buildingsGroup, 0, 1);
+        _rightPanel.Controls.Add(rightPanelLayout);
 
         layout.Controls.Add(_leftPanel, 0, 0);
         layout.Controls.Add(_rightPanel, 1, 0);
@@ -194,10 +247,39 @@ internal class GameScreen : MaterialForm
         Controls.Add(layout);
     }
 
-
     private void AutoClickerTimer_Tick(object sender, EventArgs e)
     {
         GameData.Instance.Clicks += GameData.Instance.IdleIncome;
         GameData.Instance.ClicksLabel.Text = $"Points: {GameData.Instance.Clicks.FormatCompact()}";
+    }
+
+    public void RefreshUpgrades()
+    {
+        _upgradesLayout.Controls.Clear();
+
+        int visible = 0;
+
+        foreach (var building in GameData.Instance.BuildingDefinitions)
+        {
+            foreach (var upgrade in building.Upgrades)
+            {
+                upgrade.UnlockCondition();
+
+                if (upgrade.Visible || upgrade.IsPurchased) continue;
+
+                if (upgrade.IsUnlocked)
+                {
+                    _upgradesLayout.Controls.Add(upgrade);
+                    upgrade.Visible = true;
+                    visible++;
+                }
+            }
+        }
+
+        _upgradesLayout.ColumnCount = visible;
+        for (var i = 0; i < visible; i++)
+        {
+            _upgradesLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 95));
+        }
     }
 }

@@ -23,11 +23,19 @@ internal static class SavingLoading
         // Create full path for the file
         string filePath = Path.Combine(userDataDirectory, fileName);
 
+        List<int> ownedUpgrades = new List<int>();
+
+        foreach (var building in GameData.Instance.BuildingDefinitions)
+        {
+            ownedUpgrades.AddRange(building.Upgrades.Where(b => b.IsPurchased).Select(b => b.ID));
+        }
+
         // Define save data
         var data = new SaveFile
         {
             Data = [],
-            OwnedBuildings = GameData.Instance.BuildingDefinitions.ToDictionary(b => b.Name, b => b.Owned)
+            OwnedBuildings = GameData.Instance.BuildingDefinitions.ToDictionary(b => b.Name, b => b.Owned),
+            OwnedUpgrades = ownedUpgrades,
         };
         data.Data.Add("Clicks", GameData.Instance.Clicks.ToString());
         data.Data.Add("LastSaveTime", formattedDate);
@@ -68,6 +76,16 @@ internal static class SavingLoading
             {
                 building.Owned = owned;
                 building.UpdateLabels();
+            }
+            if (data.OwnedUpgrades == null) continue;
+            foreach (var upgrade in building.Upgrades)
+            {
+                if (data.OwnedUpgrades.Contains(upgrade.ID))
+                {
+                    upgrade.IsUnlocked = true;
+                    upgrade.Effect();
+                    upgrade.IsPurchased = true;
+                }
             }
         }
         // Notify the user that the game has been loaded
