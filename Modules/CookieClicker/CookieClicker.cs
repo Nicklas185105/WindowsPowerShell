@@ -7,11 +7,11 @@ public class CookieClicker
     private readonly GameScreen _gameScreen;
     private bool _gameLoaded = false;
 
-    public CookieClicker()
+    public CookieClicker(string basePath)
     {
         try
         {
-            GameData.Instance.CreateNewInstance();
+            GameData.Instance.CreateNewInstance(basePath);
             var gameLoaded = SavingLoading.LoadGame();
             _gameScreen = new GameScreen();
             if (gameLoaded)
@@ -26,6 +26,7 @@ public class CookieClicker
         }
     }
 
+    [STAThread]
     public void ShowForm()
     {
         Application.Run(_gameScreen);

@@ -264,8 +264,9 @@ internal class GameScreen : MaterialForm
             foreach (var upgrade in building.Upgrades)
             {
                 upgrade.UnlockCondition();
+                //Console.WriteLine($"{upgrade.Name} - {upgrade.IsUnlocked} - {upgrade.Visible} - {upgrade.IsPurchased}");
 
-                if (upgrade.Visible || upgrade.IsPurchased) continue;
+                if (upgrade.IsPurchased) continue;
 
                 if (upgrade.IsUnlocked)
                 {
@@ -281,5 +282,16 @@ internal class GameScreen : MaterialForm
         {
             _upgradesLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 95));
         }
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        base.OnFormClosing(e);
+
+        // 🧠 Example: Save the game before exit
+        //SavingLoading.SaveGame();
+        GameData.Instance.IdleTimer.Stop();
+        GameData.Instance.IdleTimer.Dispose();
+        Console.WriteLine("Game exited and disposed.");
     }
 }

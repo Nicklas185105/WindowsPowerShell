@@ -34,6 +34,6 @@ function Start-CookieClicker {
     Write-Host "Starting CookieClicker..." -ForegroundColor Green
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Numerics
-    $form = [CookieClicker.CookieClicker]::new()
+    $form = [CookieClicker.CookieClicker]::new("$PSScriptRoot")
     $form.ShowForm()
 }

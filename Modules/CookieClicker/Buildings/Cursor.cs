@@ -35,7 +35,8 @@ internal class CursorPlain(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 2).ToString()),
     "The mouse and cursors are twice as efficient.",
     UpgradeType.Plain,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorPlain.png")))
 {
     public override void Effect()
     {
@@ -54,7 +55,8 @@ internal class CursorBerrylium(BuildingDefinition building) : UpgradeDefinition(
     new Number((5 * BigInteger.Pow(10, 2)).ToString()),
     "The mouse and cursors are twice as efficient.",
     UpgradeType.Berrylium,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorBerrylium.png")))
 {
     public override void Effect()
     {
@@ -73,7 +75,8 @@ internal class CursorBlueberrylium(BuildingDefinition building) : UpgradeDefinit
     new Number(BigInteger.Pow(10, 4).ToString()),
     "The mouse and cursors are twice as efficient.",
     UpgradeType.Blueberrylium,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorBlueberrylium.png")))
 {
     public override void Effect()
     {
@@ -92,7 +95,8 @@ internal class CursorChalcedhoney(BuildingDefinition building) : UpgradeDefiniti
     new Number(BigInteger.Pow(10, 5).ToString()),
     "The mouse and cursors gain +0.1 cookies for each non-cursor object owned.",
     UpgradeType.Chalcedhoney,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorChalcedhoney.png")))
 {
     public override void Effect()
     {
@@ -111,7 +115,8 @@ internal class CursorButtergold(BuildingDefinition building) : UpgradeDefinition
     new Number(BigInteger.Pow(10, 7).ToString()),
     "Multiplies the gain from Thousand fingers by 5.",
     UpgradeType.Buttergold,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorButtergold.png")))
 {
     public override void Effect()
     {
@@ -130,7 +135,8 @@ internal class CursorSugarmuck(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 8).ToString()),
     "Multiplies the gain from Thousand fingers by 10.",
     UpgradeType.Sugarmuck,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorSugarmuck.png")))
 {
     public override void Effect()
     {
@@ -149,7 +155,8 @@ internal class CursorJetmint(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 9).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Jetmint,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorJetmint.png")))
 {
     public override void Effect()
     {
@@ -168,7 +175,8 @@ internal class CursorCherrysilver(BuildingDefinition building) : UpgradeDefiniti
     new Number(BigInteger.Pow(10, 10).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Cherrysilver,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorCherrysilver.png")))
 {
     public override void Effect()
     {
@@ -187,7 +195,8 @@ internal class CursorHazelrald(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 13).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Hazelrald,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorHazelrald.png")))
 {
     public override void Effect()
     {
@@ -206,7 +215,8 @@ internal class CursorMooncandy(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 16).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Mooncandy,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorMooncandy.png")))
 {
     public override void Effect()
     {
@@ -225,7 +235,8 @@ internal class CursorAstrofudge(BuildingDefinition building) : UpgradeDefinition
     new Number(BigInteger.Pow(10, 19).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Astrofudge,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorAstrofudge.png")))
 {
     public override void Effect()
     {
@@ -244,7 +255,8 @@ internal class CursorAlabascream(BuildingDefinition building) : UpgradeDefinitio
     new Number(BigInteger.Pow(10, 22).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Alabascream,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorAlabascream.png")))
 {
     public override void Effect()
     {
@@ -263,7 +275,8 @@ internal class CursorIridyum(BuildingDefinition building) : UpgradeDefinition(
     new Number(BigInteger.Pow(10, 25).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Iridyum,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorIridyum.png")))
 {
     public override void Effect()
     {
@@ -282,7 +295,8 @@ internal class CursorGlucosmium(BuildingDefinition building) : UpgradeDefinition
     new Number(BigInteger.Pow(10, 28).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Glucosmium,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorGlucosmium.png")))
 {
     public override void Effect()
     {
@@ -301,7 +315,8 @@ internal class CursorGlimmeringue(BuildingDefinition building) : UpgradeDefiniti
     new Number(BigInteger.Pow(10, 31).ToString()),
     "Multiplies the gain from Thousand fingers by 20.",
     UpgradeType.Glimmeringue,
-    building)
+    building,
+    Utils.LoadImage(Path.Combine("Cursor", "CursorGlimmeringue.png")))
 {
     public override void Effect()
     {

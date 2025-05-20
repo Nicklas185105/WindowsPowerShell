@@ -9,8 +9,9 @@ internal class GameData
 {
     // singleton instance
     private static GameData _instance;
-    public static GameData Instance => _instance ??= new GameData();
+    public static GameData Instance => _instance ??= new GameData("");
     public GameScreen Screen { get; set; }
+    public string BasePath { get; set; }
 
     private Number _clicks;
     private List<BuildingDefinition> _buildingDefinitions;
@@ -38,7 +39,7 @@ internal class GameData
 
     public event EventHandler OnPointsChanged;
 
-    private GameData()
+    private GameData(string basePath)
     {
         IdleTimer = new Timer
         {
@@ -48,11 +49,12 @@ internal class GameData
         IdleIncome = new Number("0");
         ClickValue = new Number("1");
         LastSaveTime = DateTime.Now;
+        BasePath = basePath;
     }
 
-    public void CreateNewInstance()
+    public void CreateNewInstance(string basePath)
     {
-        _instance = new GameData();
+        _instance = new GameData(basePath);
         _buildingDefinitions = CreateBuildings();
     }
 
