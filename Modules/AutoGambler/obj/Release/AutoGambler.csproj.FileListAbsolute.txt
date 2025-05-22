@@ -1,0 +1,12 @@
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.AssemblyInfoInputs.cache
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.AssemblyInfo.cs
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.csproj.CoreCompileInputs.cache
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.sourcelink.json
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.dll
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\refint\AutoGambler.dll
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\AutoGambler.pdb
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\AutoGambler.deps.json
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\AutoGambler.dll
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\obj\Release\ref\AutoGambler.dll
+C:\Users\xnily\Dokumenter\Powershell\Modules\AutoGambler\AutoGambler.pdb

@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>AutoGambler</AssemblyName>
+    <LangVersion>Latest</LangVersion>
+
+    <!-- Force Release build -->
+    <Configuration>Release</Configuration>
+
+    <!-- Force output to project root without tfm folder -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>$(MSBuildProjectDirectory)\\</OutputPath>
+    <OutputType>Library</OutputType>
+
+    <!-- Optional: Don't create obj folder clutter either -->
+    <!-- <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)\\obj\\</BaseIntermediateOutputPath> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AutoGambler.cs" />
+    <Compile Include="Export\BestGenomeExporter.cs" />
+    <Compile Include="GameLogic\BatchSimulator.cs" />
+    <Compile Include="Games\Blackjack\AI\BlackjackGenome.cs" />
+    <Compile Include="Simulations\GenomeEvaluator.cs" />
+    <Compile Include="Games\Blackjack\AI\GenomeStrategy.cs" />
+    <Compile Include="Simulations\GenomeTrainer.cs" />
+    <Compile Include="Games\Blackjack\BasicStrategy.cs" />
+    <Compile Include="Games\Blackjack\BlackjackGame.cs" />
+    <Compile Include="Games\Blackjack\BlackjackRoundManager.cs" />
+    <Compile Include="Simulations\BlackjackSimulator.cs" />
+    <Compile Include="Games\Blackjack\Card.cs" />
+    <Compile Include="Games\Blackjack\Deck.cs" />
+    <Compile Include="Games\Blackjack\Hand.cs" />
+    <Compile Include="Interfaces\IBettingStrategy.cs" />
+    <Compile Include="Interfaces\IPlayerStrategy.cs" />
+    <Compile Include="Strategies\DAlembertStrategy.cs" />
+    <Compile Include="Strategies\FibonacciStrategy.cs" />
+    <Compile Include="Strategies\FlatBettingStrategy.cs" />
+    <Compile Include="Strategies\MartingaleStrategy.cs" />
+    <Compile Include="Strategies\ReverseMartingaleStrategy.cs" />
+    <Compile Include="GameLogic\StrategySelector.cs" />
+    <Compile Include="Utils\GamblerLogger.cs" />
+    <Compile Include="GameLogic\CoinFlipGame.cs" />
+  </ItemGroup>
+
+</Project>

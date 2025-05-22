@@ -11,7 +11,7 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # Module Imports
 # -------------------------------
 # List of modules to import if available. You may install missing ones.
-$modules = @('posh-git', 'PSReadLine', 'Microsoft.PowerShell.ConsoleGuiTools', 'CookieClicker')
+$modules = @('posh-git', 'PSReadLine', 'Microsoft.PowerShell.ConsoleGuiTools', 'CookieClicker', 'AutoGambler')
 foreach ($module in $modules) {
 	if (Get-Module -ListAvailable -Name $module) {
 		Import-Module $module -ErrorAction SilentlyContinue
